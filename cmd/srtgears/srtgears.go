@@ -91,7 +91,6 @@ func parseTime(t string) (time.Duration, error) {
 		}
 		return time.Duration(n)
 	}
-
 	return time.Hour*get(1) + time.Minute*get(2) + time.Second*get(3) + time.Millisecond*get(4), nil
 }
 
@@ -138,7 +137,7 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 	}
 
 	if removeHI {
-		sp1.RemoveHearingImpaired()
+		sp1.RemoveHI()
 	}
 
 	if removeHTML {
@@ -168,7 +167,20 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 	if stats {
 		ss := sp1.Stats()
 		// TODO
-		fmt.Println(ss)
+		fmt.Printf("STATS of %s:\n", in)
+		p := func(name string, value interface{}) {
+			fmt.Printf("%-40s: %v\n", name, value)
+		}
+		p("Total # of subtitles", ss.Subs)
+		p("# of lines", ss.Lines)
+		p("Avg lines per sub", fmt.Sprintf("%.4f", ss.AvgLinesPerSub))
+		p("Avg chars per line", fmt.Sprintf("%.4f", ss.AvgCharsPerLine))
+		p("Total subtitle display time", ss.TotalDispDur)
+		p("Subtitle visible ratio (compared to total length)", fmt.Sprintf("%.2f%%", ss.SubVisibRatio*100))
+		p("Avg. display duration per 10 char", ss.AvgDispDurPerChar*10)
+		p("# of subs having HTML formatting", ss.HTMLs)
+		p("# of subs having controls", ss.Controls)
+		p("# of subs having hearing impaired lines", ss.HIs)
 	}
 
 	return

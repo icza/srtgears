@@ -43,17 +43,23 @@ func (s *Subtitle) DisplayDuration() time.Duration {
 	return s.TimeOut - s.TimeIn
 }
 
-// RemoveHearingImpaired removes hearing impaired lines
+// RemoveHI removes hearing impaired lines
 // (such as "[PHONE RINGING]" or "(phone ringing)").
-func (s *Subtitle) RemoveHearingImpaired() {
+// Returns true if HI lines were present.
+func (s *Subtitle) RemoveHI() (remove bool) {
 	// It may be just some (e.g. first) lines are hearing impaired.
 	for i := len(s.Lines) - 1; i >= 0; i-- {
 		line := s.Lines[i]
+		// Check without HTML formatting to recognize and remove these:
+		// "<i>[PHONE RINGING]</i>"
+		line = htmlPattern.ReplaceAllString(line, "")
 		first, last := line[0], line[len(line)-1]
 		if first == '[' && last == ']' || first == '(' && last == ')' {
+			remove = true
 			s.Lines = append(s.Lines[:i], s.Lines[i+1:]...)
 		}
 	}
+	return
 }
 
 // Shift shifts the subtitle with the specified delta.
@@ -74,18 +80,30 @@ func (s *Subtitle) Scale(factor float64) {
 var htmlPattern = regexp.MustCompile(`<[^>]+>`)
 
 // RemoveHTML removes HTML formatting.
-func (s *Subtitle) RemoveHTML() {
+// Returns true if HTML formatting was present.
+func (s *Subtitle) RemoveHTML() (removed bool) {
 	for i, v := range s.Lines {
 		s.Lines[i] = htmlPattern.ReplaceAllString(v, "")
+		removed = removed || s.Lines[i] != v
 	}
+	// Color comes from HTML, so also zero it
+	removed = removed || s.Color != ""
+	s.Color = ""
+	return
 }
 
 // Pattern used to remove controls such as {\anX} (or {\aY}), {\pos(x,y)}.
 var controlPattern = regexp.MustCompile(`^{\\[^}]*}`)
 
 // RemoveControl removes controls such as {\anX} (or {\aY}), {\pos(x,y)}.
-func (s *Subtitle) RemoveControl() {
+// Returns true if controls were present.
+func (s *Subtitle) RemoveControl() (removed bool) {
 	for i, v := range s.Lines {
 		s.Lines[i] = controlPattern.ReplaceAllString(v, "")
+		removed = removed || s.Lines[i] != v
 	}
+	// Pos comes from control, so also zero it
+	removed = removed || s.Pos != PosNotSpecified
+	s.Pos = PosNotSpecified
+	return
 }

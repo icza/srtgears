@@ -9,17 +9,13 @@ package srtgears
 import (
 	"sort"
 	"time"
+	"unicode/utf8"
 )
 
 // SubsPack represents subtitles of a movie,
 // a collection of Subtitles and other meta info.
 type SubsPack struct {
 	Subs []*Subtitle
-}
-
-// Statistics that can be gathered from a SubsPack.
-type SubsStats struct {
-	// TODO
 }
 
 // Type that implements sorting
@@ -63,12 +59,12 @@ func (sp *SubsPack) SetColor(color string) {
 	}
 }
 
-// RemoveHearingImpaired removes hearing impaired lines from subtitles
+// RemoveHI removes hearing impaired lines from subtitles
 // (such as "[PHONE RINGING]" or "(phone ringing)").
-func (sp *SubsPack) RemoveHearingImpaired() {
+func (sp *SubsPack) RemoveHI() {
 	for i := len(sp.Subs) - 1; i >= 0; i-- {
 		s := sp.Subs[i]
-		s.RemoveHearingImpaired()
+		s.RemoveHI()
 		if len(s.Lines) == 0 {
 			// Can be removed completely
 			sp.Subs = append(sp.Subs[:i], sp.Subs[i+1:]...)
@@ -155,8 +151,57 @@ func (sp *SubsPack) Lengthen(factor float64) {
 	// TODO
 }
 
-func (sp *SubsPack) Stats() (ss *SubsStats) {
-	ss = &SubsStats{}
+// Statistics that can be gathered from a SubsPack.
+type SubsStats struct {
+	Subs              int           // Total number of subs.
+	Lines             int           // # of lines
+	AvgLinesPerSub    float64       // Avg lines per sub
+	Chars             int           // # of characters
+	AvgCharsPerLine   float64       // Avg chars per line
+	TotalDispDur      time.Duration // Total subtitle display time
+	SubVisibRatio     float64       // Subtitle visible ratio (compared to total time)
+	AvgDispDurPerChar time.Duration // Avg. display duration per char
+	HTMLs             int           // # of subtitles having HTML formatting
+	Controls          int           // # of subtitles having controls
+	HIs               int           // # of subtitles having hearing impaired lines
+}
+
+// Stats analyzes the subtitle pack and returns various statistics.
+// Subtitles will be modified.
+func (sp *SubsPack) Stats() *SubsStats {
 	// TODO
-	return
+	ss := SubsStats{
+		Subs: len(sp.Subs),
+	}
+
+	for _, s := range sp.Subs {
+		ss.TotalDispDur += s.DisplayDuration()
+		ss.Lines += len(s.Lines)
+
+		if s.RemoveControl() {
+			ss.Controls++
+		}
+		if s.RemoveHTML() {
+			ss.HTMLs++
+		}
+
+		for _, v := range s.Lines {
+			ss.Chars += utf8.RuneCountInString(v)
+		}
+
+		if s.RemoveHI() {
+			ss.HIs++
+		}
+	}
+
+	if len(sp.Subs) > 0 {
+		if last := sp.Subs[len(sp.Subs)-1].TimeOut; last != 0 {
+			ss.SubVisibRatio = float64(ss.TotalDispDur) / float64(last)
+		}
+	}
+
+	ss.AvgLinesPerSub = float64(ss.Lines) / float64(ss.Subs)
+	ss.AvgCharsPerLine = float64(ss.Chars) / float64(ss.Lines)
+	ss.AvgDispDurPerChar = ss.TotalDispDur / time.Duration(ss.Chars)
+	return &ss
 }
