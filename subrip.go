@@ -65,6 +65,9 @@ func ReadSrt(r io.Reader) (sp *SubsPack, err error) {
 			}
 		}
 	}
+	if s != nil { // Append last subtitle if there is no empty line at the end of input
+		sp.Subs = append(sp.Subs, s)
+	}
 
 	err = scanner.Err()
 	return
@@ -95,7 +98,7 @@ func parseTimestamps(s *Subtitle, line string) {
 
 	// First part is the complete match
 	s.TimeIn = time.Hour*get(1) + time.Minute*get(2) + time.Second*get(3) + time.Millisecond*get(4)
-	s.TimeIn = time.Hour*get(5) + time.Minute*get(6) + time.Second*get(7) + time.Millisecond*get(8)
+	s.TimeOut = time.Hour*get(5) + time.Minute*get(6) + time.Second*get(7) + time.Millisecond*get(8)
 }
 
 //WriteSrt generates SubRip format.
