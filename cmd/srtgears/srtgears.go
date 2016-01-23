@@ -166,7 +166,6 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 
 	if stats {
 		ss := sp1.Stats()
-		// TODO
 		fmt.Printf("STATS of %s:\n", in)
 		p := func(name string, value interface{}) {
 			fmt.Printf("%-40s: %v\n", name, value)
@@ -174,10 +173,15 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 		p("Total # of subtitles", ss.Subs)
 		p("# of lines", ss.Lines)
 		p("Avg lines per sub", fmt.Sprintf("%.4f", ss.AvgLinesPerSub))
+		p("# of characters (spaces included)", ss.Chars)
 		p("Avg chars per line", fmt.Sprintf("%.4f", ss.AvgCharsPerLine))
+		p("# of words", ss.Words)
+		p("Avg words per line", fmt.Sprintf("%.4f", ss.AvgWordsPerLine))
+		p("# of characters (without spaces)", ss.CharsNoSpace)
+		p("Avg Chars per word", fmt.Sprintf("%.4f", ss.AvgCharsPerWord))
 		p("Total subtitle display time", ss.TotalDispDur)
-		p("Subtitle visible ratio (compared to total length)", fmt.Sprintf("%.2f%%", ss.SubVisibRatio*100))
-		p("Avg. display duration per 10 char", ss.AvgDispDurPerChar*10)
+		p("Subtitle visible ratio", fmt.Sprintf("%.2f%% (compared to total length)", ss.SubVisibRatio*100))
+		p("Avg. display duration", ss.AvgDispDurPerNonSpaceChar.String()+" per 1 non-space char")
 		p("# of subs having HTML formatting", ss.HTMLs)
 		p("# of subs having controls", ss.Controls)
 		p("# of subs having hearing impaired lines", ss.HIs)
@@ -234,9 +238,9 @@ func procFlags() error {
 
 const examples = `
 Examples:
-To merge 2 files to have a dual sub:
+Merge 2 files to have a dual sub:
     srtgears -in eng.srt -in2 hun.srt -out eng+hun.srt
-To concatenate 2 files where 2nd part of the movie starts at 51 min 15 sec:
+Concatenate 2 files where 2nd part of the movie starts at 51 min 15 sec:
     srtgears -in cd1.srt -in2 cd2.srt -out cd12.srt -concat=00:51:15:00,000
-To change color to yellow, move subtitles to top, remove hearing impaired subtitles and increase display duration by 10%:
+Change color to yellow, move subtitles to top, remove hearing impaired subtitles and increase display duration by 10%:
     srtgears -in eng.srt -out eng2.srt -color=yellow -pos=T -removehi -lengthen=1.1`

@@ -8,6 +8,7 @@ package srtgears
 
 import (
 	"sort"
+	"strings"
 	"time"
 	"unicode/utf8"
 )
@@ -153,23 +154,26 @@ func (sp *SubsPack) Lengthen(factor float64) {
 
 // Statistics that can be gathered from a SubsPack.
 type SubsStats struct {
-	Subs              int           // Total number of subs.
-	Lines             int           // # of lines
-	AvgLinesPerSub    float64       // Avg lines per sub
-	Chars             int           // # of characters
-	AvgCharsPerLine   float64       // Avg chars per line
-	TotalDispDur      time.Duration // Total subtitle display time
-	SubVisibRatio     float64       // Subtitle visible ratio (compared to total time)
-	AvgDispDurPerChar time.Duration // Avg. display duration per char
-	HTMLs             int           // # of subtitles having HTML formatting
-	Controls          int           // # of subtitles having controls
-	HIs               int           // # of subtitles having hearing impaired lines
+	Subs                      int           // Total number of subs.
+	Lines                     int           // # of lines
+	AvgLinesPerSub            float64       // Avg lines per sub
+	Chars                     int           // # of characters (spaces included)
+	AvgCharsPerLine           float64       // Avg chars per line
+	Words                     int           // # of words
+	AvgWordsPerLine           float64       // Avg words per line
+	CharsNoSpace              int           // # of characters (without spaces)
+	AvgCharsPerWord           float64       // Avg Chars per word
+	TotalDispDur              time.Duration // Total subtitle display time
+	SubVisibRatio             float64       // Subtitle visible ratio (compared to total time)
+	AvgDispDurPerNonSpaceChar time.Duration // Avg. display duration per non-space char
+	HTMLs                     int           // # of subs having HTML formatting
+	Controls                  int           // # of subs having controls
+	HIs                       int           // # of subs having hearing impaired lines
 }
 
 // Stats analyzes the subtitle pack and returns various statistics.
 // Subtitles will be modified.
 func (sp *SubsPack) Stats() *SubsStats {
-	// TODO
 	ss := SubsStats{
 		Subs: len(sp.Subs),
 	}
@@ -187,6 +191,11 @@ func (sp *SubsPack) Stats() *SubsStats {
 
 		for _, v := range s.Lines {
 			ss.Chars += utf8.RuneCountInString(v)
+			fields := strings.Fields(v)
+			ss.Words += len(fields)
+			for _, v2 := range fields {
+				ss.CharsNoSpace += utf8.RuneCountInString(v2)
+			}
 		}
 
 		if s.RemoveHI() {
@@ -202,6 +211,10 @@ func (sp *SubsPack) Stats() *SubsStats {
 
 	ss.AvgLinesPerSub = float64(ss.Lines) / float64(ss.Subs)
 	ss.AvgCharsPerLine = float64(ss.Chars) / float64(ss.Lines)
-	ss.AvgDispDurPerChar = ss.TotalDispDur / time.Duration(ss.Chars)
+	ss.AvgWordsPerLine = float64(ss.Words) / float64(ss.Lines)
+	ss.AvgCharsPerWord = float64(ss.CharsNoSpace) / float64(ss.Words)
+	if ss.Chars > 0 {
+		ss.AvgDispDurPerNonSpaceChar = ss.TotalDispDur / time.Duration(ss.CharsNoSpace)
+	}
 	return &ss
 }
