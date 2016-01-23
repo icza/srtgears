@@ -7,6 +7,7 @@ This file defines the Subtitle model type and its utility methods / transformati
 package srtgears
 
 import (
+	"regexp"
 	"time"
 )
 
@@ -64,4 +65,24 @@ func (s *Subtitle) Scale(factor float64) {
 	dispdur := s.DisplayDuration()
 	s.TimeIn = time.Duration(float64(s.TimeIn) * factor)
 	s.TimeOut = s.TimeIn + dispdur
+}
+
+// Pattern used to remove HTML formatting
+var htmlPattern = regexp.MustCompile(`<[^>]+>`)
+
+// RemoveHTML removes HTML formatting.
+func (s *Subtitle) RemoveHTML() {
+	for i, v := range s.Lines {
+		s.Lines[i] = htmlPattern.ReplaceAllString(v, "")
+	}
+}
+
+// Pattern used to remove controls such as {\anX} (or {\aY}), {\pos(x,y)}.
+var controlPattern = regexp.MustCompile(`^{\\[^}]*}`)
+
+// RemoveControl removes controls such as {\anX} (or {\aY}), {\pos(x,y)}.
+func (s *Subtitle) RemoveControl() {
+	for i, v := range s.Lines {
+		s.Lines[i] = controlPattern.ReplaceAllString(v, "")
+	}
 }

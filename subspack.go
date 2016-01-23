@@ -17,6 +17,11 @@ type SubsPack struct {
 	Subs []*Subtitle
 }
 
+// Statistics that can be gathered from a SubsPack.
+type SubsStats struct {
+	// TODO
+}
+
 // Type that implements sorting
 type SortSubtitles []*Subtitle
 
@@ -48,6 +53,13 @@ func (sp *SubsPack) Scale(factor float64) {
 func (sp *SubsPack) SetPos(pos Pos) {
 	for _, s := range sp.Subs {
 		s.Pos = pos
+	}
+}
+
+// SetColor sets the color of all subtitles.
+func (sp *SubsPack) SetColor(color string) {
+	for _, s := range sp.Subs {
+		s.Color = color
 	}
 }
 
@@ -118,5 +130,29 @@ func (sp *SubsPack) Split(at time.Duration) (sp2 *SubsPack) {
 	// Shift splitted subs:
 	sp2.Shift(-at)
 
+	return
+}
+
+// RemoveHTML removes HTML formatting from all subtitles.
+func (sp *SubsPack) RemoveHTML() {
+	for _, s := range sp.Subs {
+		s.RemoveHTML()
+	}
+}
+
+// RemoveControl removes controls such as {\anX} (or {\aY}), {\pos(x,y)} from all subtitles.
+func (sp *SubsPack) RemoveControl() {
+	for _, s := range sp.Subs {
+		s.RemoveHTML()
+	}
+}
+
+// Lengthen lenthens the display duration of all subtitles.
+func (sp *SubsPack) Lengthen(factor float64) {
+	// TODO
+}
+
+func (sp *SubsPack) Stats() (ss *SubsStats) {
+	// TODO
 	return
 }
