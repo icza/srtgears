@@ -6,7 +6,7 @@ Srtgears provides some very handy features which are not available in other subt
 
 - merge 2 subtitle files to have dual subs: one at the bottom, one at the top (this is not concatenation, but that's also supported)
 - lengthen / shorten display duration of subtitles (if you're a slow reader, you're gonna appreciate this :))
-- remove hearing impact-only subtitles (such as "[PHONE RINGING]" or "(phone ringing)")
+- remove hearing impaired subtitles (such as "[PHONE RINGING]" or "(phone ringing)")
 - strip off formatting (such as &lt;i&gt;, &lt;b&gt;, &lt;u&gt;, &lt;font&gt;) 
 - statistics from the subtitle
 - etc...
