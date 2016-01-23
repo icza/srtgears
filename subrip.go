@@ -66,11 +66,8 @@ func ReadSrtFile(name string) (sp *SubsPack, err error) {
 // ReadSrtFrom reads and parses a SubRip from an io.Reader (*.srt) and builds the model from it.
 func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 	sp = &SubsPack{}
-
 	scanner := bufio.NewScanner(r)
-
 	phase := 0
-
 	var s *Subtitle
 
 	addSub := func() {
@@ -94,7 +91,6 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 
 	for scanner.Scan() {
 		line := scanner.Text()
-
 		switch phase {
 		case 0: // wanting sequence number, starting a new sub
 			if line == "" {
@@ -119,6 +115,8 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 	if s != nil { // Append last subtitle if there is no empty line at the end of input
 		addSub()
 	}
+
+	sp.Sort()
 
 	err = scanner.Err()
 	return
@@ -177,7 +175,7 @@ func WriteSrtTo(w io.Writer, sp *SubsPack) (err error) {
 		}
 	}
 
-	newline := "\r\n" // Use Windows-style newline
+	const newline = "\r\n" // Use Windows-style newline
 
 	for i, s := range sp.Subs {
 		if err != nil {
