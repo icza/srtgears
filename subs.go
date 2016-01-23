@@ -28,7 +28,7 @@ const (
 	TopRight
 )
 
-// Subtitle represents 1 subtitle, 1 displayable text.
+// Subtitle represents 1 subtitle, 1 displayable text (which may be broken into multiple lines).
 type Subtitle struct {
 	TimeIn  time.Duration // Timestamp when subtitle appears
 	TimeOut time.Duration // Timestamp when subtitle disappears
