@@ -3,6 +3,7 @@
 Contains configuration used by package srtgears.
 
 */
+
 package srtgears
 
 import (

@@ -146,7 +146,7 @@ func (sp *SubsPack) RemoveHTML() {
 // RemoveControl removes controls such as {\anX} (or {\aY}), {\pos(x,y)} from all subtitles.
 func (sp *SubsPack) RemoveControl() {
 	for _, s := range sp.Subs {
-		s.RemoveHTML()
+		s.RemoveControl()
 	}
 }
 
@@ -156,6 +156,7 @@ func (sp *SubsPack) Lengthen(factor float64) {
 }
 
 func (sp *SubsPack) Stats() (ss *SubsStats) {
+	ss = &SubsStats{}
 	// TODO
 	return
 }

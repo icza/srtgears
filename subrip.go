@@ -60,6 +60,7 @@ func ReadSrtFile(name string) (sp *SubsPack, err error) {
 	}
 	defer f.Close()
 
+	debugf("Reading from file: %s", name)
 	return ReadSrtFrom(f)
 }
 
@@ -170,7 +171,7 @@ func parseTimestamps(s *Subtitle, line string, lineNum int) {
 	s.TimeOut = time.Hour*get(5) + time.Minute*get(6) + time.Second*get(7) + time.Millisecond*get(8)
 
 	if s.TimeOut <= s.TimeIn {
-		debugf("Appear is not earlier than disappear, text won't be visible (Time1 >= Time2) in line %d: %s", lineNum, line)
+		debugf("Time1 >= Time2, text won't be visible in line %d: %s", lineNum, line)
 	}
 }
 
