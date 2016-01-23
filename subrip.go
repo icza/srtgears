@@ -160,6 +160,10 @@ func parseTimestamps(s *Subtitle, line string) {
 	// First part is the complete match
 	s.TimeIn = time.Hour*get(1) + time.Minute*get(2) + time.Second*get(3) + time.Millisecond*get(4)
 	s.TimeOut = time.Hour*get(5) + time.Minute*get(6) + time.Second*get(7) + time.Millisecond*get(8)
+
+	if s.TimeOut <= s.TimeIn {
+		debugf("Appear is not earlier than disappear, text won't be visible (Time1 >= Time2): %s", line)
+	}
 }
 
 // WriteSrtFile generates SubRip format and writes it to a file.

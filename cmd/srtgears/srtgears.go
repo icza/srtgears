@@ -70,7 +70,20 @@ func procFlags() error {
 	flag.BoolVar(&repair, "repair", false, "do nothing just parse and re-save")
 	flag.BoolVar(&stats, "stats", false, "analyze file and print statistics")
 
+	oldUsage := flag.Usage
+	flag.Usage = func() {
+		oldUsage()
+		fmt.Println(examples)
+	}
+
 	flag.Parse()
 
 	return nil
 }
+
+const examples = `
+Examples:
+To merge 2 files to have a dual sub:
+    srtgears -in eng.srt -in2 hun.srt -out eng+hun.srt
+To change color to yellow, move subtitles to top, remove hearing impaired subtitles and increase display duration by 10%:
+    srtgears -in eng.srt -out eng2.srt -color=yellow -pos=T -removehi -lengthen=1.1`

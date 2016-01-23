@@ -26,13 +26,13 @@ https://srt-gears.appspot.com/downloads
 
 ### 2. Web interface: online web page
 
-Srtgears can also be used on the web for those who do not want to download the tool, just try it or use it from the browser. It can be found here:
+Srtgears can also be used on the web for those who do not want to download just the tool from the browser. It can be found here:
 
 https://srt-gears.appspot.com/srtgears-online
 
 ### 3. Go package
 
-And last (but not least) a Go package with clear and easy-to use interface + documentation, should you need to use it in your project.
+And last (but not least) a Go package for developers. The engine was designed to be independent from the command line and web interface, it's API is clear, well documented and easy-to-use.
 
 To get the source code (along with the sources of the tool and web interface), use `go get`:
 
@@ -41,6 +41,17 @@ To get the source code (along with the sources of the tool and web interface), u
 Documentation can be found at:
 
 http://godoc.org/github.com/gophergala2016/srtgears
+
+For example to merge 2 subtitle files to have a dual sub, it can be done as:
+
+	sp1, err := srtgears.ReadSrtFile("eng.srt")
+	// check err
+	sp2, err := srtgears.ReadSrtFile("hun.srt")
+	// check err
+	sp1.Merge(sp2)
+	err = srtgears.WriteSrtFile("eng+hun.srt", sp1);
+	// check err
+    
 
 # License
 
