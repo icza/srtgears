@@ -67,6 +67,12 @@ func ReadSrtFile(name string) (sp *SubsPack, err error) {
 // Regexp pattern to validate sequence number lines
 var seqNumPattern = regexp.MustCompile(`^\s*\d+\s*$`)
 
+// A starter font pattern and the color attribute value.
+var starterFontPattern = regexp.MustCompile(`^\s*<\s*font\s+color\s*=\s*['"]?([^'"]*)['"]?\s*>`)
+
+// </font> closing tag pattern.
+var fontClosingPattern = regexp.MustCompile(`<\s*/\s*font\s*>`)
+
 // ReadSrtFrom reads and parses a SubRip from an io.Reader (*.srt) and builds the model from it.
 func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 	sp = &SubsPack{}
@@ -78,7 +84,7 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 		// Post process
 		if len(s.Lines) > 0 {
 			// find position spec in first line (e.g. {\anX})
-			if line := s.Lines[0]; strings.HasPrefix(line, "{\a") {
+			if line := s.Lines[0]; strings.HasPrefix(line, `{\a`) {
 				// 2 variants: {\anX} and {\aX}
 				if len(line) >= 6 && line[3] == 'n' && line[5] == '}' {
 					if p, ok := srtPosToModelPos[line[4]]; ok {
@@ -86,7 +92,19 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 						s.Lines[0] = line[6:] // Cut off pos spec from text
 					}
 				} else {
-					// TODO
+					// TODO other variant
+				}
+			}
+			// Find if there is starter <font color="">
+			if parts := starterFontPattern.FindStringSubmatch(s.Lines[0]); len(parts) > 0 {
+				s.Color = parts[1]
+				s.Lines[0] = s.Lines[0][len(parts[0]):] // cut off whole <font>
+				// Find it's closing part
+				for i, v := range s.Lines {
+					if loc := fontClosingPattern.FindStringIndex(v); loc != nil {
+						s.Lines[i] = v[:loc[0]] + v[loc[1]:]
+						break
+					}
 				}
 			}
 		}
@@ -97,7 +115,7 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if lineNum == 0 {
-			// BOM should be stripped by scanner, but it doesn't (BUG). // Manually check.
+			// If BOM is present, strip it off
 			if strings.HasPrefix(line, "\xef\xbb\xbf") {
 				line = line[3:]
 			}
@@ -233,9 +251,21 @@ func WriteSrtTo(w io.Writer, sp *SubsPack) (err error) {
 		// Texts
 		for i, line := range s.Lines {
 			if i == 0 && s.Pos != PosNotSpecified {
-				prf("{\an%c}", modelPosToSrtPos[s.Pos])
+				prf(`{\an%c}`, modelPosToSrtPos[s.Pos])
 			}
-			pr(line, newline)
+			if s.Color != "" {
+				// If there is color, wrap all lines into a <font>.
+				if i == 0 { // This means opening in first line
+					prf(`<font color="%s">`, s.Color)
+				}
+				pr(line)
+				if i == len(s.Lines)-1 { // And closing in the last
+					pr("</font>")
+				}
+				pr(newline)
+			} else {
+				pr(line, newline)
+			}
 		}
 
 		// Separator: empty line

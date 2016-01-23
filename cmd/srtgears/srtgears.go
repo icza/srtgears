@@ -30,7 +30,6 @@ var (
 	removeHI   bool    // remove hearing impaired subtitles (such as '[PHONE RINGING]' or '(phone ringing)')
 	pos        string  // change subtitle position, one of: BL, B, BR, L, C, R, TL, T, TR  (B: bottom, T: Top, L: Left, R: Right, C: Center)
 	color      string  // change subtitle color, name (e.g. 'red' or 'yellow') or RGB hexa '#rrggbb' (e.g.'#ff0000' for red)
-	repair     bool    // do nothing just parse and re-save
 	stats      bool    // analyze file and print statistics
 )
 
@@ -119,6 +118,18 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 		sp1.Lengthen(lengthen)
 	}
 
+	if removeCtrl {
+		sp1.RemoveControl()
+	}
+
+	if removeHI {
+		sp1.RemoveHI()
+	}
+
+	if removeHTML {
+		sp1.RemoveHTML()
+	}
+
 	if pos != "" {
 		m := map[string]srtgears.Pos{
 			"TL": srtgears.TopLeft, "T": srtgears.Top, "TR": srtgears.TopRight,
@@ -132,20 +143,8 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 		sp1.SetPos(pos2)
 	}
 
-	if removeCtrl {
-		sp1.RemoveControl()
-	}
-
-	if removeHI {
-		sp1.RemoveHI()
-	}
-
-	if removeHTML {
-		sp1.RemoveHTML()
-	}
-
-	if removeCtrl {
-		sp1.RemoveControl()
+	if color != "" {
+		sp1.SetColor(color)
 	}
 
 	if scale != 0 {
@@ -178,7 +177,7 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 		p("# of words", ss.Words)
 		p("Avg words per line", fmt.Sprintf("%.4f", ss.AvgWordsPerLine))
 		p("# of characters (without spaces)", ss.CharsNoSpace)
-		p("Avg Chars per word", fmt.Sprintf("%.4f", ss.AvgCharsPerWord))
+		p("Avg chars per word", fmt.Sprintf("%.4f", ss.AvgCharsPerWord))
 		p("Total subtitle display time", ss.TotalDispDur)
 		p("Subtitle visible ratio", fmt.Sprintf("%.2f%% (compared to total length)", ss.SubVisibRatio*100))
 		p("Avg. display duration", ss.AvgDispDurPerNonSpaceChar.String()+" per 1 non-space char")
@@ -222,7 +221,6 @@ func procFlags() error {
 	flag.BoolVar(&removeHI, "removehi", false, "remove hearing impaired subtitles (such as '[PHONE RINGING]' or '(phone ringing)')")
 	flag.StringVar(&pos, "pos", "", "change subtitle position, one of: BL, B, BR, L, C, R, TL, T, TR  (B: bottom, T: Top, L: Left, R: Right, C: Center)")
 	flag.StringVar(&color, "color", "", "change subtitle color, name (e.g. 'red' or 'yellow') or RGB hexa '#rrggbb' (e.g.'#ff0000' for red)")
-	flag.BoolVar(&repair, "repair", false, "do nothing just parse and re-save")
 	flag.BoolVar(&stats, "stats", false, "analyze file and print statistics")
 
 	oldUsage := flag.Usage
@@ -242,5 +240,7 @@ Merge 2 files to have a dual sub:
     srtgears -in eng.srt -in2 hun.srt -out eng+hun.srt
 Concatenate 2 files where 2nd part of the movie starts at 51 min 15 sec:
     srtgears -in cd1.srt -in2 cd2.srt -out cd12.srt -concat=00:51:15:00,000
-Change color to yellow, move subtitles to top, remove hearing impaired subtitles and increase display duration by 10%:
-    srtgears -in eng.srt -out eng2.srt -color=yellow -pos=T -removehi -lengthen=1.1`
+Change subtitle color to yellow, move to top, remove hearing impaired lines and increase display duration by 10%:
+    srtgears -in eng.srt -out eng2.srt -color=yellow -pos=T -removehi -lengthen=1.1
+Repair: do nothing, just parse and re-save
+    srtgears -in eng.srt -out eng2.srt`
