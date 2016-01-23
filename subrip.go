@@ -139,13 +139,27 @@ func parseTimestamps(s *Subtitle, line string) {
 
 //WriteSrt generates SubRip format.
 func WriteSrt(w io.Writer, s *SubsPack) (err error) {
+	// noop writers: if there were a previous error, do nothing:
+	pr := func(a ...interface{}) {
+		if err == nil {
+			_, err = fmt.Fprint(w, a...)
+		}
+	}
+	prf := func(format string, a ...interface{}) {
+		if err == nil {
+			_, err = fmt.Fprintf(w, format, a...)
+		}
+	}
+
 	newline := "\r\n" // Use Windows-style newline
 
 	for i, v := range s.Subs {
-		// Sequence number
-		if _, err = fmt.Fprint(w, i+1, newline); err != nil {
+		if err != nil {
 			break
 		}
+
+		// Sequence number
+		pr(i+1, newline)
 
 		// Timestamps
 		for tidx := 0; tidx < 2; tidx++ {
@@ -159,36 +173,24 @@ func WriteSrt(w io.Writer, s *SubsPack) (err error) {
 			min := (t % time.Hour) / time.Minute
 			sec := (t % time.Minute) / time.Second
 			ms := (t % time.Second) / time.Millisecond
-			if _, err = fmt.Fprintf(w, "%02d:%02d:%02d,%03d", hour, min, sec, ms); err != nil {
-				break
-			}
+			prf("%02d:%02d:%02d,%03d", hour, min, sec, ms)
 			if tidx == 0 {
-				if _, err = fmt.Fprint(w, " --> "); err != nil {
-					break
-				}
+				pr(" --> ")
 			} else {
-				if _, err = fmt.Fprint(w, newline); err != nil {
-					break
-				}
+				pr(newline)
 			}
 		}
 
 		// Texts
 		for i, line := range v.Lines {
 			if i == 0 && v.Pos != PosNotSpecified {
-				if _, err = fmt.Fprint(w, "{\an%c}", modelPosToSrtPos[v.Pos]); err != nil {
-					break
-				}
+				prf("{\an%c}", modelPosToSrtPos[v.Pos])
 			}
-			if _, err = fmt.Fprint(w, line, newline); err != nil {
-				break
-			}
+			pr(line, newline)
 		}
 
-		// Empty line
-		if _, err = fmt.Fprint(w, newline); err != nil {
-			break
-		}
+		// Separator: empty line
+		pr(newline)
 	}
 
 	return
