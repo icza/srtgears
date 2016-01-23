@@ -43,14 +43,17 @@ func (s *Subtitle) DisplayDuration() time.Duration {
 	return s.TimeOut - s.TimeIn
 }
 
-// HearingImpaired tells if the subtitle is hearing impaired.
-func (s *Subtitle) HearingImpaired() bool {
-	if len(s.Lines) == 0 {
-		return false
+// RemoveHearingImpaired removes hearing impaired lines
+// (such as "[PHONE RINGING]" or "(phone ringing)").
+func (s *Subtitle) RemoveHearingImpaired() {
+	// It may be just some (e.g. first) lines are hearing impaired.
+	for i := len(s.Lines) - 1; i >= 0; i-- {
+		line := s.Lines[i]
+		first, last := line[0], line[len(line)-1]
+		if first == '[' && last == ']' || first == '(' && last == ')' {
+			s.Lines = append(s.Lines[:i], s.Lines[i+1:]...)
+		}
 	}
-	lastLine := s.Lines[len(s.Lines)-1]
-	first, last := s.Lines[0][0], lastLine[len(lastLine)-1]
-	return first == '[' && last == ']' || first == '(' && last == ')'
 }
 
 // Shift shifts the subtitle with the specified delta.

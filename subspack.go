@@ -63,11 +63,14 @@ func (sp *SubsPack) SetColor(color string) {
 	}
 }
 
-// RemoveHearingImpaired removes hearing impaired subtitles
+// RemoveHearingImpaired removes hearing impaired lines from subtitles
 // (such as "[PHONE RINGING]" or "(phone ringing)").
 func (sp *SubsPack) RemoveHearingImpaired() {
 	for i := len(sp.Subs) - 1; i >= 0; i-- {
-		if sp.Subs[i].HearingImpaired() {
+		s := sp.Subs[i]
+		s.RemoveHearingImpaired()
+		if len(s.Lines) == 0 {
+			// Can be removed completely
 			sp.Subs = append(sp.Subs[:i], sp.Subs[i+1:]...)
 		}
 	}

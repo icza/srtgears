@@ -92,8 +92,16 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 		sp.Subs, s = append(sp.Subs, s), nil
 	}
 
+	lineNum := 0
 	for scanner.Scan() {
 		line := scanner.Text()
+		if lineNum == 0 {
+			// BOM should be stripped by scanner, but it doesn't (BUG). // Manually check.
+			if strings.HasPrefix(line, "\xef\xbb\xbf") {
+				line = line[3:]
+			}
+		}
+		lineNum++
 		switch phase {
 		case 0: // wanting sequence number, starting a new sub
 			if line == "" {
@@ -101,14 +109,14 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 			}
 			if Debug {
 				if !seqNumPattern.MatchString(line) {
-					debugf("Invalid sequence number line: %s", line)
+					debugf("Invalid sequence number in line %d: %d %v", lineNum, len(line), []byte(line))
 				}
 			}
 			// discard seq#, we generate sequence numbres when writing
 			s = &Subtitle{}
 			phase++
 		case 1: // wanting timestamps
-			parseTimestamps(s, line)
+			parseTimestamps(s, line, lineNum)
 			phase++
 		case 2: // wanting subtitle lines
 			if line == "" {
@@ -140,12 +148,12 @@ var timestampsPattern = regexp.MustCompile(`(\d\d):(\d\d):(\d\d)[,\.](\d\d\d)\s*
 //                                            0 0 :  0 0 :  0 0  ,     0 0 0    -->     0 0 :  0 0 :  0 0  ,     0 0 0
 
 // parseTimestamps parses a timestamp line
-func parseTimestamps(s *Subtitle, line string) {
+func parseTimestamps(s *Subtitle, line string, lineNum int) {
 	// Example: 00:02:20,476 --> 00:02:22,501
 	parts := timestampsPattern.FindStringSubmatch(line)
 	if len(parts) == 0 {
 		// No match, invalid timestamp line
-		debugf("Invalid timestamp line: %s", line)
+		debugf("Invalid timestamp in line %d: %s", lineNum, line)
 		return
 	}
 
@@ -162,7 +170,7 @@ func parseTimestamps(s *Subtitle, line string) {
 	s.TimeOut = time.Hour*get(5) + time.Minute*get(6) + time.Second*get(7) + time.Millisecond*get(8)
 
 	if s.TimeOut <= s.TimeIn {
-		debugf("Appear is not earlier than disappear, text won't be visible (Time1 >= Time2): %s", line)
+		debugf("Appear is not earlier than disappear, text won't be visible (Time1 >= Time2) in line %d: %s", lineNum, line)
 	}
 }
 

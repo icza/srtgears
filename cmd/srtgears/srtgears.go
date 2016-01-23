@@ -9,7 +9,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gophergala2016/srtgears"
-	"os"
 )
 
 var (
@@ -32,6 +31,9 @@ var (
 	stats      bool    // analyze file and print statistics
 )
 
+// Loaded subtitles
+var sp1, sp2 *srtgears.SubsPack
+
 func main() {
 	fmt.Printf("Srtgears %s, home page: %s\n", srtgears.Version, srtgears.HomePage)
 
@@ -41,13 +43,56 @@ func main() {
 		return
 	}
 
-	sp, err := srtgears.ReadSrtFile("w:/video/a.srt")
-	if err != nil {
-		panic(err)
+	if readFiles() != nil {
+		return
 	}
-	if err = srtgears.WriteSrtTo(os.Stdout, sp); err != nil {
-		panic(err)
+
+	gearIt(sp1, sp2)
+
+	if writeFiles() != nil {
+		return
 	}
+}
+
+// readFiles loads the subtitle files specified by the '-in' and '-in2' flags.
+func readFiles() (err error) {
+	if in != "" {
+		if sp1, err = srtgears.ReadSrtFile(in); err != nil {
+			fmt.Println("Failed reading %s: %v", in, err)
+			return
+		}
+	}
+	if in2 != "" {
+		if sp2, err = srtgears.ReadSrtFile(in2); err != nil {
+			fmt.Println("Failed reading %s: %v", in2, err)
+			return
+		}
+	}
+	return
+}
+
+// gearIt performs subtitle transformations specified by the command line flags
+func gearIt(sp1, sp2 *srtgears.SubsPack) {
+	if merge {
+		sp1.Merge(sp2)
+	}
+}
+
+// writeFiles writes the output files specified by the '-out' and '-out2' flags.
+func writeFiles() (err error) {
+	if out != "" && sp1 != nil {
+		if err = srtgears.WriteSrtFile(out, sp1); err != nil {
+			fmt.Println("Failed writing %s: %v", out, err)
+			return
+		}
+	}
+	if out2 != "" && sp2 != nil {
+		if err = srtgears.WriteSrtFile(out2, sp2); err != nil {
+			fmt.Println("Failed writing %s: %v", out2, err)
+			return
+		}
+	}
+	return
 }
 
 func procFlags() error {
