@@ -31,6 +31,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -51,8 +52,19 @@ var modelPosToSrtPos = map[Pos]byte{
 	BottomLeft: '1', Bottom: '2', BottomRight: '3',
 }
 
-// ReadSrt reads and parses a SubRip stream (*.srt) and builds the model from it.
-func ReadSrt(r io.Reader) (sp *SubsPack, err error) {
+// ReadSrtFile reads and parses a SubRip file (*.srt) and builds the model from it.
+func ReadSrtFile(name string) (sp *SubsPack, err error) {
+	f, err := os.Open(name)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+
+	return ReadSrtFrom(f)
+}
+
+// ReadSrtFrom reads and parses a SubRip from an io.Reader (*.srt) and builds the model from it.
+func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 	sp = &SubsPack{}
 
 	scanner := bufio.NewScanner(r)
@@ -85,6 +97,9 @@ func ReadSrt(r io.Reader) (sp *SubsPack, err error) {
 
 		switch phase {
 		case 0: // wanting sequence number, starting a new sub
+			if line == "" {
+				break // If multiple empty line separates, just ignore them
+			}
 			// discard seq#, we generate sequence numbres when writing
 			s = &Subtitle{}
 			phase++
@@ -137,8 +152,19 @@ func parseTimestamps(s *Subtitle, line string) {
 	s.TimeOut = time.Hour*get(5) + time.Minute*get(6) + time.Second*get(7) + time.Millisecond*get(8)
 }
 
-//WriteSrt generates SubRip format.
-func WriteSrt(w io.Writer, s *SubsPack) (err error) {
+//WriteSrtFile generates SubRip format and writes it to a file.
+func WriteSrtFile(name string, sp *SubsPack) (err error) {
+	f, err := os.Create(name)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+
+	return WriteSrtTo(f, sp)
+}
+
+//WriteSrtTo generates SubRip format and writes it to an io.Writer.
+func WriteSrtTo(w io.Writer, sp *SubsPack) (err error) {
 	// noop writers: if there were a previous error, do nothing:
 	pr := func(a ...interface{}) {
 		if err == nil {
@@ -153,7 +179,7 @@ func WriteSrt(w io.Writer, s *SubsPack) (err error) {
 
 	newline := "\r\n" // Use Windows-style newline
 
-	for i, v := range s.Subs {
+	for i, s := range sp.Subs {
 		if err != nil {
 			break
 		}
@@ -165,9 +191,9 @@ func WriteSrt(w io.Writer, s *SubsPack) (err error) {
 		for tidx := 0; tidx < 2; tidx++ {
 			var t time.Duration
 			if tidx == 0 {
-				t = v.TimeIn
+				t = s.TimeIn
 			} else {
-				t = v.TimeOut
+				t = s.TimeOut
 			}
 			hour := t / time.Hour
 			min := (t % time.Hour) / time.Minute
@@ -182,9 +208,9 @@ func WriteSrt(w io.Writer, s *SubsPack) (err error) {
 		}
 
 		// Texts
-		for i, line := range v.Lines {
-			if i == 0 && v.Pos != PosNotSpecified {
-				prf("{\an%c}", modelPosToSrtPos[v.Pos])
+		for i, line := range s.Lines {
+			if i == 0 && s.Pos != PosNotSpecified {
+				prf("{\an%c}", modelPosToSrtPos[s.Pos])
 			}
 			pr(line, newline)
 		}
