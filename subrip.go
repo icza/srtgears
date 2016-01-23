@@ -29,11 +29,27 @@ package srtgears
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
+
+// Mapping between *.srt pos to our model Pos for the {\anX} variant
+var srtPosToModelPos = map[byte]Pos{
+	'7': TopLeft, '8': Top, '9': TopRight,
+	'4': Left, '5': Center, '6': Right,
+	'1': BottomLeft, '2': Bottom, '3': BottomRight,
+}
+
+// Mapping between our model Pos to *.srt for the {\anX} variant
+var modelPosToSrtPos = map[Pos]byte{
+	TopLeft: '7', Top: '8', TopRight: '9',
+	Left: '4', Center: '5', Right: '6',
+	BottomLeft: '1', Bottom: '2', BottomRight: '3',
+}
 
 // ReadSrt reads and parses a SubRip stream (*.srt) and builds the model from it.
 func ReadSrt(r io.Reader) (sp *SubsPack, err error) {
@@ -44,6 +60,26 @@ func ReadSrt(r io.Reader) (sp *SubsPack, err error) {
 	phase := 0
 
 	var s *Subtitle
+
+	addSub := func() {
+		// Post process
+		if len(s.Lines) > 0 {
+			// find position spec in first line (e.g. {\anX})
+			if line := s.Lines[0]; strings.HasPrefix(line, "{\a") {
+				// 2 variants: {\anX} and {\aX}
+				if len(line) >= 6 && line[3] == 'n' && line[5] == '}' {
+					if p, ok := srtPosToModelPos[line[4]]; ok {
+						s.Pos = p
+						s.Lines[0] = line[6:] // Cut off pos spec from text
+					}
+				} else {
+					// TODO
+				}
+			}
+		}
+		sp.Subs, s = append(sp.Subs, s), nil
+	}
+
 	for scanner.Scan() {
 		line := scanner.Text()
 
@@ -58,7 +94,7 @@ func ReadSrt(r io.Reader) (sp *SubsPack, err error) {
 		case 2: // wanting subtitle lines
 			if line == "" {
 				// End of subtitle, separator
-				sp.Subs, s = append(sp.Subs, s), nil
+				addSub()
 				phase = 0
 			} else {
 				s.Lines = append(s.Lines, line)
@@ -66,7 +102,7 @@ func ReadSrt(r io.Reader) (sp *SubsPack, err error) {
 		}
 	}
 	if s != nil { // Append last subtitle if there is no empty line at the end of input
-		sp.Subs = append(sp.Subs, s)
+		addSub()
 	}
 
 	err = scanner.Err()
@@ -102,6 +138,58 @@ func parseTimestamps(s *Subtitle, line string) {
 }
 
 //WriteSrt generates SubRip format.
-func WriteSrt(w io.Writer, s *SubsPack) error {
-	return nil
+func WriteSrt(w io.Writer, s *SubsPack) (err error) {
+	newline := "\r\n" // Use Windows-style newline
+
+	for i, v := range s.Subs {
+		// Sequence number
+		if _, err = fmt.Fprint(w, i+1, newline); err != nil {
+			break
+		}
+
+		// Timestamps
+		for tidx := 0; tidx < 2; tidx++ {
+			var t time.Duration
+			if tidx == 0 {
+				t = v.TimeIn
+			} else {
+				t = v.TimeOut
+			}
+			hour := t / time.Hour
+			min := (t % time.Hour) / time.Minute
+			sec := (t % time.Minute) / time.Second
+			ms := (t % time.Second) / time.Millisecond
+			if _, err = fmt.Fprintf(w, "%02d:%02d:%02d,%03d", hour, min, sec, ms); err != nil {
+				break
+			}
+			if tidx == 0 {
+				if _, err = fmt.Fprint(w, " --> "); err != nil {
+					break
+				}
+			} else {
+				if _, err = fmt.Fprint(w, newline); err != nil {
+					break
+				}
+			}
+		}
+
+		// Texts
+		for i, line := range v.Lines {
+			if i == 0 && v.Pos != PosNotSpecified {
+				if _, err = fmt.Fprint(w, "{\an%c}", modelPosToSrtPos[v.Pos]); err != nil {
+					break
+				}
+			}
+			if _, err = fmt.Fprint(w, line, newline); err != nil {
+				break
+			}
+		}
+
+		// Empty line
+		if _, err = fmt.Fprint(w, newline); err != nil {
+			break
+		}
+	}
+
+	return
 }
