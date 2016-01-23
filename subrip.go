@@ -2,7 +2,7 @@
 
 This file implements reading and writing the SubRip file format (*.srt).
 It can parse *.srt files and create model from them.
-And it also generate SubRip content from a model.
+And it can also generate SubRip content from a model.
 
 Format specifications:
 https://en.wikipedia.org/wiki/SubRip
@@ -12,7 +12,7 @@ The parser is permissive, it tries to parse the input even if it does not confor
 
 Unofficial extensions are also supported and used.
 
-Example of an SRT file:
+An example SRT file:
 
     1
     00:02:17,440 --> 00:02:20,375

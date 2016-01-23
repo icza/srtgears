@@ -32,7 +32,7 @@ https://srt-gears.appspot.com/srtgears-online
 
 ### 3. Go package
 
-And last (but not least) a Go package for developers. The engine was designed to be independent from the command line and web interface, it's API is clear, well documented and easy-to-use.
+And last (but not least) a Go package for developers. The engine was designed to be independent from the command line and web interfaces, its API is clear, well documented and easy-to-use.
 
 To get the source code (along with the sources of the tool and web interface), use `go get`:
 

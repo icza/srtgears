@@ -13,6 +13,7 @@ import (
 const (
 	Version  = "1.0"                            // Srtgears engine version
 	HomePage = "https://srt-gears.appspot.com/" // Srtgears home page
+	Author   = "Andras Belicza"                 // Author name
 )
 
 var (

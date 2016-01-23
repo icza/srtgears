@@ -9,8 +9,10 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gophergala2016/srtgears"
+	"path"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -191,13 +193,26 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 
 // writeFiles writes the output files specified by the '-out' and '-out2' flags.
 func writeFiles() (err error) {
+	wf := func(name string, sp *srtgears.SubsPack) (err error) {
+		ext := strings.ToLower(path.Ext(out))
+		switch ext {
+		case ".srt":
+			return srtgears.WriteSrtFile(name, sp)
+		case ".ssa":
+			return srtgears.WriteSsaFile(name, sp)
+		case "":
+			return fmt.Errorf("Output extension not specified!")
+		}
+		return fmt.Errorf("Unsupported file extension, only *.srt and *.ssa are supported: %s", ext)
+	}
+
 	if out != "" && sp1 != nil {
-		if err = srtgears.WriteSrtFile(out, sp1); err != nil {
+		if err = wf(out, sp1); err != nil {
 			return
 		}
 	}
 	if out2 != "" && sp2 != nil {
-		if err = srtgears.WriteSrtFile(out2, sp2); err != nil {
+		if err = wf(out2, sp2); err != nil {
 			return
 		}
 	}
