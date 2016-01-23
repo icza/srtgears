@@ -61,19 +61,62 @@ func (sp *SubsPack) RemoveHearingImpaired() {
 	}
 }
 
-// Concatenate concatenates another SubsPack into this.
-// Subtitles are not copied, only their address is appended to ours.
+// Concatenate concatenates another SubsPack to this.
+// Subtitles are not copied, only their addresses are appended to ours.
 //
 // In order to get correct timing for the concatenated 2nd part,
 // timestamps of the concatenated subtitles have to be shifted
 // with the start time of the 2nd part of the movie
 // (which is usually the length of the first part).
+//
+// Useful if movie is present in 1 part but there are 2 subtitles for 2 parts.
 func (sp *SubsPack) Concatenate(sp2 *SubsPack, secPartStart time.Duration) {
 	sp2.Shift(secPartStart)
 	sp.Subs = append(sp.Subs, sp2.Subs...)
 
-	// there might be overlapping between the 2 parts
-	// (e.g. 2nd part repeats the last minute of the end of the first part),
+	// There might be overlapping between the 2 parts
+	// (e.g. 2nd part repeats the last minute of the first part),
 	// so just to be well-behaved:
 	sp.Sort()
+}
+
+// Merge merges another SubsPack into this to create a "dual subtitle".
+// Subtitles are not copied, only their addresses are merged to ours.
+//
+// Useful if 2 different subtitles are to be displayed at the same time, e.g. 2 different languages.
+func (sp *SubsPack) Merge(sp2 *SubsPack) {
+	// Put our subtitles to bottom:
+	sp.SetPos(PosNotSpecified)
+
+	// Put other subtitles to the top:
+	sp.SetPos(Top)
+
+	// Append:
+	sp.Subs = append(sp.Subs, sp2.Subs...)
+
+	// And sort
+	sp.Sort()
+}
+
+// Split splits this SubsPack into 2 at the specified time.
+// Subtitles before the split time will remain in this, subtitles after the split time
+// will be added to a new SubsPack that is returned.
+//
+// Useful to create 2 subtitles if movie is present in 2 parts but subtitle is for one.
+func (sp *SubsPack) Split(at time.Duration) (sp2 *SubsPack) {
+	sp2 = &SubsPack{}
+
+	subs := sp.Subs
+	idx := sort.Search(len(subs), func(i int) bool {
+		return subs[i].TimeIn >= at
+	})
+
+	sp2.Subs = make([]*Subtitle, len(subs)-idx)
+	copy(sp2.Subs, subs[idx:])
+	sp.Subs = subs[:idx]
+
+	// Shift splitted subs:
+	sp2.Shift(-at)
+
+	return
 }
