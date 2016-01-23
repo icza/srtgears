@@ -18,7 +18,7 @@ Home page: https://srt-gears.appspot.com
 The Srtgears engine is presented in 3 ways:
 
 ### 1. Command line tool
-Srtgears is available as a command line tool for easy and fast usage.
+Srtgears is available as a command line tool for easy, fast, scriptable and repeatable usage.
 
 Binary (compiled) distributions are available on the download page:
 
@@ -42,6 +42,6 @@ Documentation can be found at:
 
 http://godoc.org/github.com/gophergala2016/srtgears
 
-# LICENSE
+# License
 
 See [LICENSE](https://github.com/gophergala2016/srtgears/blob/master/LICENSE.md)

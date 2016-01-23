@@ -63,6 +63,9 @@ func ReadSrtFile(name string) (sp *SubsPack, err error) {
 	return ReadSrtFrom(f)
 }
 
+// Regexp pattern to validate sequence number lines
+var seqNumPattern = regexp.MustCompile(`^\s*\d+\s*$`)
+
 // ReadSrtFrom reads and parses a SubRip from an io.Reader (*.srt) and builds the model from it.
 func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 	sp = &SubsPack{}
@@ -96,6 +99,11 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 			if line == "" {
 				break // If multiple empty line separates, just ignore them
 			}
+			if Debug {
+				if !seqNumPattern.MatchString(line) {
+					debugf("Invalid sequence number line: %s", line)
+				}
+			}
 			// discard seq#, we generate sequence numbres when writing
 			s = &Subtitle{}
 			phase++
@@ -116,6 +124,8 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 		addSub()
 	}
 
+	debugf("Loaded %d subtitles.", len(sp.Subs))
+
 	sp.Sort()
 
 	err = scanner.Err()
@@ -134,7 +144,9 @@ func parseTimestamps(s *Subtitle, line string) {
 	// Example: 00:02:20,476 --> 00:02:22,501
 	parts := timestampsPattern.FindStringSubmatch(line)
 	if len(parts) == 0 {
-		return // No match, invalid timestamp line
+		// No match, invalid timestamp line
+		debugf("Invalid timestamp line: %s", line)
+		return
 	}
 
 	get := func(idx int) time.Duration {
@@ -150,7 +162,7 @@ func parseTimestamps(s *Subtitle, line string) {
 	s.TimeOut = time.Hour*get(5) + time.Minute*get(6) + time.Second*get(7) + time.Millisecond*get(8)
 }
 
-//WriteSrtFile generates SubRip format and writes it to a file.
+// WriteSrtFile generates SubRip format and writes it to a file.
 func WriteSrtFile(name string, sp *SubsPack) (err error) {
 	f, err := os.Create(name)
 	if err != nil {
@@ -161,7 +173,7 @@ func WriteSrtFile(name string, sp *SubsPack) (err error) {
 	return WriteSrtTo(f, sp)
 }
 
-//WriteSrtTo generates SubRip format and writes it to an io.Writer.
+// WriteSrtTo generates SubRip format and writes it to an io.Writer.
 func WriteSrtTo(w io.Writer, sp *SubsPack) (err error) {
 	// noop writers: if there were a previous error, do nothing:
 	pr := func(a ...interface{}) {
