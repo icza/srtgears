@@ -53,6 +53,12 @@ For example to merge 2 subtitle files to have a dual sub, it can be done as:
 	// check err
     
 
+# Limits
+
+Input files must be UTF-8 encoded, output files will be UTF-8 encoded.
+
+Supported input format is SubRip (`*.srt`) only, supported output formats are SubRip (`*.srt`) and Sub Station Alpha (`*.ssa`).
+
 # License
 
 See [LICENSE](https://github.com/gophergala2016/srtgears/blob/master/LICENSE.md)

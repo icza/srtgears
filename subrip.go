@@ -207,6 +207,14 @@ func WriteSrtFile(name string, sp *SubsPack) (err error) {
 func WriteSrtTo(w io.Writer, sp *SubsPack) error {
 	wr := &writer{w: w}
 
+	printTime := func(t time.Duration) {
+		hour := t / time.Hour
+		min := (t % time.Hour) / time.Minute
+		sec := (t % time.Minute) / time.Second
+		ms := (t % time.Second) / time.Millisecond
+		wr.prf("%02d:%02d:%02d.%03d", hour, min, sec, ms)
+	}
+
 	for i, s := range sp.Subs {
 		if wr.err != nil {
 			break
@@ -216,24 +224,10 @@ func WriteSrtTo(w io.Writer, sp *SubsPack) error {
 		wr.prn(i + 1)
 
 		// Timestamps
-		for tidx := 0; tidx < 2; tidx++ {
-			var t time.Duration
-			if tidx == 0 {
-				t = s.TimeIn
-			} else {
-				t = s.TimeOut
-			}
-			hour := t / time.Hour
-			min := (t % time.Hour) / time.Minute
-			sec := (t % time.Minute) / time.Second
-			ms := (t % time.Second) / time.Millisecond
-			wr.prf("%02d:%02d:%02d,%03d", hour, min, sec, ms)
-			if tidx == 0 {
-				wr.pr(" --> ")
-			} else {
-				wr.prn()
-			}
-		}
+		printTime(s.TimeIn)
+		wr.pr(" --> ")
+		printTime(s.TimeOut)
+		wr.prn()
 
 		// Texts
 		for i, line := range s.Lines {
