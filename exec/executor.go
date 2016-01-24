@@ -49,8 +49,10 @@ func New() *Executor {
 }
 
 // ProcFlags sets up variables for parsing the arguments, pointing to the fields of the Executor.
+// And parses the arguments.
 func (e *Executor) ProcFlags(arguments []string) error {
 	f := e.FlagSet
+
 	f.StringVar(&e.In, "in", "", "input file name (*.srt)")
 	f.StringVar(&e.Out, "out", "", "output file name (*.srt or *.ssa)")
 	f.StringVar(&e.In2, "in2", "", "optional 2nd input file name (when merging or concatenating subtitles) (*.srt)")
@@ -72,10 +74,13 @@ func (e *Executor) ProcFlags(arguments []string) error {
 	return f.Parse(arguments)
 }
 
+// Regexp pattern used to parse timestamps.
+var timestampPattern = regexp.MustCompile(`(\d\d):(\d\d):(\d\d)[,\.](\d\d\d)`)
+
 // parseTime parses a timestamp which must be in the form of
 // 00:00:00,000
 func parseTime(t string) (time.Duration, error) {
-	parts := regexp.MustCompile(`(\d\d):(\d\d):(\d\d)[,\.](\d\d\d)`).FindStringSubmatch(t)
+	parts := timestampPattern.FindStringSubmatch(t)
 	if len(parts) == 0 {
 		return 0, fmt.Errorf("Invalid time: %s", t)
 	}
@@ -87,6 +92,13 @@ func parseTime(t string) (time.Duration, error) {
 		return time.Duration(n)
 	}
 	return time.Hour*get(1) + time.Minute*get(2) + time.Second*get(3) + time.Millisecond*get(4), nil
+}
+
+// Mapping between positions expected in arguments to our model Pos.
+var argPosToModelPos = map[string]srtgears.Pos{
+	"TL": srtgears.TopLeft, "T": srtgears.Top, "TR": srtgears.TopRight,
+	"L": srtgears.Left, "C": srtgears.Center, "R": srtgears.Right,
+	"BL": srtgears.BottomLeft, "B": srtgears.Bottom, "BR": srtgears.BottomRight,
 }
 
 // GearIt performs subtitle transformations specified by the arguments passed to ProcFlags().
@@ -130,12 +142,7 @@ func (e *Executor) GearIt() (err error) {
 	}
 
 	if e.Pos != "" {
-		m := map[string]srtgears.Pos{
-			"TL": srtgears.TopLeft, "T": srtgears.Top, "TR": srtgears.TopRight,
-			"L": srtgears.Left, "C": srtgears.Center, "R": srtgears.Right,
-			"BL": srtgears.BottomLeft, "B": srtgears.Bottom, "BR": srtgears.BottomRight,
-		}
-		pos2, ok := m[e.Pos]
+		pos2, ok := argPosToModelPos[e.Pos]
 		if !ok {
 			return fmt.Errorf("Invalid pos value: %s", e.Pos)
 		}
