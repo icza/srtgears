@@ -76,6 +76,17 @@ func (s *Subtitle) Scale(factor float64) {
 	s.TimeOut = s.TimeIn + dispdur
 }
 
+// Lengthen lenthens the display duration of the subtitle.
+func (s *Subtitle) Lengthen(factor float64) {
+	newDur := time.Duration(float64(s.DisplayDuration()) * factor)
+	center := (s.TimeIn + s.TimeOut) / 2
+	s.TimeIn = center - newDur/2
+	if s.TimeIn < 0 { // Make sure it's not negative
+		s.TimeIn = 0
+	}
+	s.TimeOut = s.TimeIn + newDur // specify relative to s.TimeIn as it may have been modified
+}
+
 // Pattern used to remove HTML formatting
 var htmlPattern = regexp.MustCompile(`<[^>]+>`)
 

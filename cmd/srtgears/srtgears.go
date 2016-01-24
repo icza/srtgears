@@ -169,23 +169,23 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 		ss := sp1.Stats()
 		fmt.Printf("STATS of %s:\n", in)
 		p := func(name string, value interface{}) {
-			fmt.Printf("%-40s: %v\n", name, value)
+			fmt.Printf("%-29s: %v\n", name, value)
 		}
 		p("Total # of subtitles", ss.Subs)
-		p("# of lines", ss.Lines)
+		p("Lines", ss.Lines)
 		p("Avg lines per sub", fmt.Sprintf("%.4f", ss.AvgLinesPerSub))
-		p("# of characters (spaces included)", ss.Chars)
-		p("Avg chars per line", fmt.Sprintf("%.4f", ss.AvgCharsPerLine))
-		p("# of words", ss.Words)
+		p("Chars (with spaces)", ss.Chars)
+		p("Chars (without spaces)", ss.CharsNoSpace)
+		p("Avg chars (no space) per line", fmt.Sprintf("%.4f", ss.AvgCharsPerLine))
+		p("Words", ss.Words)
 		p("Avg words per line", fmt.Sprintf("%.4f", ss.AvgWordsPerLine))
-		p("# of characters (without spaces)", ss.CharsNoSpace)
 		p("Avg chars per word", fmt.Sprintf("%.4f", ss.AvgCharsPerWord))
 		p("Total subtitle display time", ss.TotalDispDur)
 		p("Subtitle visible ratio", fmt.Sprintf("%.2f%% (compared to total length)", ss.SubVisibRatio*100))
 		p("Avg. display duration", ss.AvgDispDurPerNonSpaceChar.String()+" per 1 non-space char")
-		p("# of subs having HTML formatting", ss.HTMLs)
-		p("# of subs having controls", ss.Controls)
-		p("# of subs having hearing impaired lines", ss.HIs)
+		p("Subs with HTML formatting", ss.HTMLs)
+		p("Subs with controls", ss.Controls)
+		p("Subs with hearing impaired", ss.HIs)
 	}
 
 	return

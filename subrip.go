@@ -115,7 +115,7 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if lineNum == 0 {
-			// If BOM is present, strip it off
+			// If BOM is present, strip it off. It's "\uFEFF", which is "\xef\xbb\xbf" in UTF-8
 			if strings.HasPrefix(line, "\xef\xbb\xbf") {
 				line = line[3:]
 			}
@@ -128,7 +128,7 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 			}
 			if Debug {
 				if !seqNumPattern.MatchString(line) {
-					debugf("Invalid sequence number in line %d: %d %v", lineNum, len(line), []byte(line))
+					debugf("Invalid sequence number in line %d: %s", lineNum, line)
 				}
 			}
 			// discard seq#, we generate sequence numbres when writing

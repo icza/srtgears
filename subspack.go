@@ -149,7 +149,9 @@ func (sp *SubsPack) RemoveControl() {
 
 // Lengthen lenthens the display duration of all subtitles.
 func (sp *SubsPack) Lengthen(factor float64) {
-	// TODO
+	for _, s := range sp.Subs {
+		s.Lengthen(factor)
+	}
 }
 
 // Statistics that can be gathered from a SubsPack.
@@ -158,11 +160,11 @@ type SubsStats struct {
 	Lines                     int           // # of lines
 	AvgLinesPerSub            float64       // Avg lines per sub
 	Chars                     int           // # of characters (spaces included)
-	AvgCharsPerLine           float64       // Avg chars per line
+	CharsNoSpace              int           // # of characters (without spaces)
+	AvgCharsPerLine           float64       // Avg chars (no space) per line
 	Words                     int           // # of words
 	AvgWordsPerLine           float64       // Avg words per line
-	CharsNoSpace              int           // # of characters (without spaces)
-	AvgCharsPerWord           float64       // Avg Chars per word
+	AvgCharsPerWord           float64       // Avg chars per word
 	TotalDispDur              time.Duration // Total subtitle display time
 	SubVisibRatio             float64       // Subtitle visible ratio (compared to total time)
 	AvgDispDurPerNonSpaceChar time.Duration // Avg. display duration per non-space char
@@ -210,10 +212,10 @@ func (sp *SubsPack) Stats() *SubsStats {
 	}
 
 	ss.AvgLinesPerSub = float64(ss.Lines) / float64(ss.Subs)
-	ss.AvgCharsPerLine = float64(ss.Chars) / float64(ss.Lines)
+	ss.AvgCharsPerLine = float64(ss.CharsNoSpace) / float64(ss.Lines)
 	ss.AvgWordsPerLine = float64(ss.Words) / float64(ss.Lines)
 	ss.AvgCharsPerWord = float64(ss.CharsNoSpace) / float64(ss.Words)
-	if ss.Chars > 0 {
+	if ss.CharsNoSpace > 0 {
 		ss.AvgDispDurPerNonSpaceChar = ss.TotalDispDur / time.Duration(ss.CharsNoSpace)
 	}
 	return &ss
