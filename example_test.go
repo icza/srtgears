@@ -6,14 +6,14 @@ Example functions.
 
 package srtgears
 
-// This example shows how to merge 2 subtitle files to have a dual sub with srtgears:
+// This example shows how to merge 2 subtitle files to have a dual sub saved in Sub Station Alpha (*.ssa) format.
 func Example_merge() {
 	sp1, err := srtgears.ReadSrtFile("eng.srt")
 	// check err
 	sp2, err := srtgears.ReadSrtFile("hun.srt")
 	// check err
 	sp1.Merge(sp2)
-	err = srtgears.WriteSrtFile("eng+hun.srt", sp1)
+	err = srtgears.WriteSsaFile("eng+hun.ssa", sp1)
 	// check err
 }
 

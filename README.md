@@ -28,7 +28,7 @@ The command line tool uses only the Go standard library and the srtgears engine 
 
 ### 2. Web interface: online web page
 
-Srtgears can also be used on the web for those who do not want to download just the tool from the browser. It can be found here:
+Srtgears can also be used on the web for those who do not want to download the tool just it out from the browser. It can be found here:
 
 https://srt-gears.appspot.com/srtgears-online.html
 
@@ -50,14 +50,14 @@ To use the engine, first import it:
 
     import "github.com/gophergala2016/srtgears"
 
-And for example using the engine to merge 2 subtitle files to have a dual sub:
+And for example using the engine to merge 2 subtitle files to have a dual sub saved in Sub Station Alpha (*.ssa) format:
 
 	sp1, err := srtgears.ReadSrtFile("eng.srt")
 	// check err
 	sp2, err := srtgears.ReadSrtFile("hun.srt")
 	// check err
 	sp1.Merge(sp2)
-	err = srtgears.WriteSrtFile("eng+hun.srt", sp1);
+	err = srtgears.WriteSsaFile("eng+hun.ssa", sp1);
 	// check err
 
 You can see more usage examples in the [package doc](http://godoc.org/github.com/gophergala2016/srtgears).    

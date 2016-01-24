@@ -251,8 +251,8 @@ func procFlags() error {
 
 const examples = `
 Examples:
-Merge 2 files to have a dual sub:
-    srtgears -in eng.srt -in2 hun.srt -out eng+hun.srt
+Merge 2 files to have a dual sub saved in Sub Station Alpha (*.ssa) format:
+    srtgears -in eng.srt -in2 hun.srt -out eng+hun.ssa
 Concatenate 2 files where 2nd part of the movie starts at 51 min 15 sec:
     srtgears -in cd1.srt -in2 cd2.srt -out cd12.srt -concat=00:51:15:00,000
 Change subtitle color to yellow, move to top, remove HI lines, increase display duration by 10% and save as *.ssa:
