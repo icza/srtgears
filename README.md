@@ -6,14 +6,14 @@ Srtgears provides some very handy features which are not available in other subt
 
 - merge 2 subtitle files to have dual subs: one at the bottom, one at the top (this is not concatenation, but that's also supported)
 - lengthen / shorten display duration of subtitles (if you're a slow reader, you're gonna appreciate this :))
-- remove hearing impaired subtitles (such as "[PHONE RINGING]" or "(phone ringing)")
+- remove hearing impaired texts (such as "[PHONE RINGING]" or "(phone ringing)")
 - strip off formatting (such as &lt;i&gt;, &lt;b&gt;, &lt;u&gt;, &lt;font&gt;) 
 - statistics from the subtitle
 - etc...
 
 Home page: https://srt-gears.appspot.com
 
-# Presentation
+## Presentation
 
 The Srtgears engine is presented in 3 ways:
 
@@ -53,12 +53,14 @@ For example to merge 2 subtitle files to have a dual sub, it can be done as:
 	// check err
     
 
-# Limits
+## Limits
 
 Input files must be UTF-8 encoded, output files will be UTF-8 encoded.
 
 Supported input format is SubRip (`*.srt`) only, supported output formats are SubRip (`*.srt`) and Sub Station Alpha (`*.ssa`).
 
-# License
+It should also be noted that SubRip format specification does not include positioning. Srtgears uses an unofficial extension `{\anX}` which may not be supported by all players. In these cases the Sub Station Alpha output format is recommended.
+
+## License
 
 See [LICENSE](https://github.com/gophergala2016/srtgears/blob/master/LICENSE.md)
