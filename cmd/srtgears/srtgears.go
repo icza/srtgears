@@ -14,11 +14,13 @@ import (
 	"strings"
 )
 
+var Version = "dev" // Srtgears version, filled by build
+
 // Our heart: the Executor
 var e = exec.New(os.Stdout)
 
 func main() {
-	fmt.Printf("Srtgears %s, home page: %s\n", srtgears.Version, srtgears.HomePage)
+	fmt.Printf("Srtgears %s, home page: %s\n", Version, srtgears.HomePage)
 
 	e.FlagSet.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage of srtgears:\n")
