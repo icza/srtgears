@@ -62,7 +62,9 @@ And for example using the engine to merge 2 subtitle files to have a dual sub sa
 	err = srtgears.WriteSsaFile("eng+hun.ssa", sp1);
 	// check err
 
-You can see more usage examples in the [package doc](http://godoc.org/github.com/gophergala2016/srtgears).    
+You can see more usage examples in the [package doc](http://godoc.org/github.com/gophergala2016/srtgears).
+
+Also worth noting that the subtitle transformations of the command line tool and the web interface are driven by the same `Executor`, it is "outsourced" to the `github.com/gophergala2016/srtgears/exec` package.    
 
 ## Limits
 
