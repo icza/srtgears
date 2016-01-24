@@ -8,7 +8,7 @@ Srtgears provides some very handy features which are not available in other subt
 - lengthen / shorten display duration of subtitles (if you're a slow reader, you're gonna appreciate this :))
 - remove hearing impaired texts (such as "[PHONE RINGING]" or "(phone ringing)")
 - strip off formatting (such as &lt;i&gt;, &lt;b&gt;, &lt;u&gt;, &lt;font&gt;) 
-- statistics from the subtitle
+- statistics from the subtitles
 - etc...
 
 Home page: https://srt-gears.appspot.com

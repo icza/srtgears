@@ -42,26 +42,78 @@
 				<li><a href="/" class="selected">Home</a></li>
 				<li><a href="/srtgears-online.html">Srtgears online</a></li>
 				<li><a href="/download.html">Downloads</a></li>
+				<li><a href="/license.html">License</a></li>
 			</ul>
 		</div>
 
 		<div id="content">
 			<h2>Home</h2>
-			<p>This is the home of Srtgears&trade;.</p>
-			<p>Contents of this website:</p>
+			<p>Srtgears&#8482; is a subtitle engine for reading subtitle
+				files, manipulating / transforming them and then saving the result
+				into another file.</p>
+			<p>Srtgears provides some very handy features which are not
+				available in other subtitle tools, for example:</p>
 			<ul>
-				<li><a href="/srtgears-online.html">Use srtgears online</a></li>
-				<li><a href="/download.html">Download srtgears (command
-						line tool)</a></li>
+				<li>merge 2 subtitle files to have dual subs: one at the
+					bottom, one at the top (this is not concatenation, but that's also
+					supported)</li>
+				<li>lengthen / shorten display duration of subtitles (if you're
+					a slow reader, you're gonna appreciate this :))</li>
+				<li>remove hearing impaired texts (such as "[PHONE RINGING]" or
+					"(phone ringing)")</li>
+				<li>strip off formatting (such as &lt;i&gt;, &lt;b&gt;,
+					&lt;u&gt;, &lt;font&gt;)</li>
+				<li>statistics from the subtitles</li>
+				<li>etc...</li>
 			</ul>
+
+			<h3>Presentation</h3>
+			<p>The Srtgears engine is presented in 3 ways:</p>
+			<ol>
+				<li>Srtgears is available as a <i>command line tool</i> for
+					easy, fast, scriptable and repeatable usage.<br> Binary
+					(compiled) distributions are available on the <a
+					href="/download.html">Downloads</a> page.
+				</li>
+				<li>Web interface: <i>online web page</i><br> Srtgears can
+					also be used on the web for those who do not want to download the
+					tool just it out from the browser. It can be found on the <a
+					href="/download.html">Srtgears online</a> page.
+				</li>
+				<li>Srtgears engine: a <i>Go package</i> (for developers)<br>
+					And last (but not least) a Go package for developers. The engine
+					was designed to be independent from the command line and web
+					interfaces, its API is clear, well documented and easy-to-use.<br>
+					To get the source code (along with the sources of the tool and web
+					interface), documentation and more visit the source code
+					repository:<br> <a
+					href="https://github.com/gophergala2016/srtgears" target="_blank">https://github.com/gophergala2016/srtgears</a>
+				</li>
+			</ol>
+
+			<h3>Limits</h3>
+			<p>Input files must be UTF-8 encoded, output files will be UTF-8
+				encoded as well.</p>
+			<p>Supported input format is SubRip (*.srt) only, supported
+				output formats are SubRip (*.srt) and Sub Station Alpha (*.ssa).</p>
+			<p>
+				It should also be noted that SubRip format specification does not
+				include subtitle positioning. Srtgears uses an unofficial extension
+				'{\anX}' which may not be supported by all video players, or some
+				players interpret the position values differently. <a
+					href="https://mpc-hc.org/" target="_blank">MPC-HC</a> has full
+				support for it. In these cases the Sub Station Alpha output format
+				is recommended (where the specification covers subtitle positioning
+				/ alignment).
+			</p>
+
+			<h3>Story</h3>
 			<p>
 				Srtgears is a 48-hour work created for the <a
 					href="http://gophergala.com/" target="_blank">Gopher Gala 2016</a>
-				event.<br> Srtgears (the web page, the command line tool and
-				the Go engine package) is open source and can be found here: <a
-					href="https://github.com/gophergala2016/srtgears" target="_blank">https://github.com/gophergala2016/srtgears</a><br>
-				I was competing solo.
+				event. I was competing solo.
 			</p>
+
 		</div>
 
 		<div id="footer">Srtgears is a trademark of Andr&#225;s Belicza.
