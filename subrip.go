@@ -29,7 +29,6 @@ package srtgears
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"os"
 	"regexp"
@@ -205,28 +204,16 @@ func WriteSrtFile(name string, sp *SubsPack) (err error) {
 }
 
 // WriteSrtTo generates SubRip format and writes it to an io.Writer.
-func WriteSrtTo(w io.Writer, sp *SubsPack) (err error) {
-	// noop writers: if there were a previous error, do nothing:
-	pr := func(a ...interface{}) {
-		if err == nil {
-			_, err = fmt.Fprint(w, a...)
-		}
-	}
-	prf := func(format string, a ...interface{}) {
-		if err == nil {
-			_, err = fmt.Fprintf(w, format, a...)
-		}
-	}
-
-	const newline = "\r\n" // Use Windows-style newline
+func WriteSrtTo(w io.Writer, sp *SubsPack) error {
+	wr := &writer{w: w}
 
 	for i, s := range sp.Subs {
-		if err != nil {
+		if wr.err != nil {
 			break
 		}
 
 		// Sequence number
-		pr(i+1, newline)
+		wr.prn(i + 1)
 
 		// Timestamps
 		for tidx := 0; tidx < 2; tidx++ {
@@ -240,37 +227,37 @@ func WriteSrtTo(w io.Writer, sp *SubsPack) (err error) {
 			min := (t % time.Hour) / time.Minute
 			sec := (t % time.Minute) / time.Second
 			ms := (t % time.Second) / time.Millisecond
-			prf("%02d:%02d:%02d,%03d", hour, min, sec, ms)
+			wr.prf("%02d:%02d:%02d,%03d", hour, min, sec, ms)
 			if tidx == 0 {
-				pr(" --> ")
+				wr.pr(" --> ")
 			} else {
-				pr(newline)
+				wr.prn()
 			}
 		}
 
 		// Texts
 		for i, line := range s.Lines {
 			if i == 0 && s.Pos != PosNotSpecified {
-				prf(`{\an%c}`, modelPosToSrtPos[s.Pos])
+				wr.prf(`{\an%c}`, modelPosToSrtPos[s.Pos])
 			}
 			if s.Color != "" {
 				// If there is color, wrap all lines into a <font>.
 				if i == 0 { // This means opening in first line
-					prf(`<font color="%s">`, s.Color)
+					wr.prf(`<font color="%s">`, s.Color)
 				}
-				pr(line)
+				wr.pr(line)
 				if i == len(s.Lines)-1 { // And closing in the last
-					pr("</font>")
+					wr.pr("</font>")
 				}
-				pr(newline)
+				wr.prn()
 			} else {
-				pr(line, newline)
+				wr.prn(line)
 			}
 		}
 
 		// Separator: empty line
-		pr(newline)
+		wr.prn()
 	}
 
-	return
+	return wr.err
 }

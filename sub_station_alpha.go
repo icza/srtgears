@@ -60,6 +60,8 @@ func WriteSsaFile(name string, sp *SubsPack) (err error) {
 
 // WriteSsaTo generates Sub Station Alpha format and writes it to an io.Writer.
 func WriteSsaTo(w io.Writer, sp *SubsPack) (err error) {
+
 	// TODO
+	// [Script Info] section
 	return
 }
