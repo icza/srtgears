@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	Debug bool // print debug messages
+	Debug bool // Tells whether to print debug messages.
 )
 
 func debugf(format string, a ...interface{}) {

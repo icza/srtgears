@@ -68,9 +68,9 @@ Also worth noting that the subtitle transformations of the command line tool and
 
 **Instructions to fire up the web interface locally:**
 
-If you want to try it locally, you need to download the Go AppEngine SDK. Once it's done, the srtgears engine (`srtgears` package) and the `Executor` (`srtgears/exec` package) must be copied into the web folder. On Windows this can be done by running the `g.cmd` script in the web folder.
+If you want to try it locally, you need to download the Go AppEngine SDK. Once it's done, the srtgears engine (`srtgears` package) and the `Executor` (`srtgears/exec` package) must be copied into the web folder. On Windows this can be done by running the `copy-srtgears-here.cmd` script in the web folder.
 
-If this is ready, it can be started locally by running the `goapp serve` command of the SDK.
+If this is ready, it can be started locally by running the `goapp serve` command of the SDK from the `web` folder.
 
 ## Limits
 

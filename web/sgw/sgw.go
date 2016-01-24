@@ -10,16 +10,21 @@ package sgw
 
 import (
 	"appengine"
+	"archive/zip"
 	"fmt"
 	"github.com/gophergala2016/srtgears"
 	"github.com/gophergala2016/srtgears/exec"
+	"io"
 	"net/http"
+	"path"
+	"strings"
 )
 
 func init() {
 	http.HandleFunc("/srtgears-online-submit", sgwHandler)
 }
 
+// sgwHandler handles the form submits.
 func sgwHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
@@ -46,6 +51,121 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 		args = append(args, "-in2", inh2.Filename)
 	}
 
+	args = rewindForm(args, r)
+
+	// Our heart: the Executor
+	var e = exec.New(w)         // If there are errors, we want them generated on the response.
+	e.FlagSet.Usage = func() {} // We don't want usage in the web response
+
+	if err := e.ProcFlags(args); err != nil {
+		return // Errors are already written to response.
+	}
+
+	// Read input files
+	if e.Sp1, err = srtgears.ReadSrtFrom(in); err != nil {
+		c.Errorf("Failed to parse uploaded file 'in': %v", err)
+		fmt.Fprint(w, "Failed to parse uploaded file: ", err)
+		return
+	}
+
+	if in2 != nil {
+		if e.Sp2, err = srtgears.ReadSrtFrom(in2); err != nil {
+			c.Errorf("Failed to parse uploaded file 'in2': %v", err)
+			fmt.Fprint(w, "Failed to parse 2nd uploaded file: ", err)
+			return
+		}
+	}
+
+	// Perform transformations
+	if err := e.GearIt(); err != nil {
+		fmt.Fprint(w, err)
+		return
+	}
+
+	// Everything went ok. We can now generate and send the transformed subtitles.
+	if err := sendSubs(w, e); err != nil {
+		c.Errorf("Failed to send subtitles: %v", err)
+	}
+}
+
+// sendSubs generates and send the transformed subtitles, zipped.
+func sendSubs(w http.ResponseWriter, e *exec.Executor) (err error) {
+	// First checks extensions so we can send back error.
+	// Once we start writing zip, there's no going back.
+	validExt := func(name string) bool {
+		switch ext := strings.ToLower(path.Ext(name)); ext {
+		case ".srt", ".ssa":
+			return true
+		case "":
+			fmt.Fprintf(w, "Output extension not specified: %s", name)
+		default:
+			fmt.Fprintf(w, "Unsupported file extension, only *.srt and *.ssa are supported: %s", ext)
+		}
+		return false
+	}
+
+	fileCount := 0
+	if e.Out != "" && e.Sp1 != nil {
+		if !validExt(e.Out) {
+			return
+		}
+		fileCount++
+	}
+	if e.Out2 != "" && e.Sp2 != nil {
+		if !validExt(e.Out2) {
+			return
+		}
+		fileCount++
+	}
+
+	if fileCount == 0 { // Just to make sure
+		fmt.Fprint(w, "No output file has been specified.")
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/zip")
+	w.Header().Set("Content-Disposition", "attachment; filename=subpack.zip")
+
+	zw := zip.NewWriter(w)
+	defer zw.Close()
+
+	wf := func(name string, sp *srtgears.SubsPack) (err error) {
+		var f io.Writer
+		if f, err = zw.Create(e.Out); err != nil {
+			return
+		}
+		switch ext := strings.ToLower(path.Ext(name)); ext {
+		case ".srt":
+			return srtgears.WriteSrtTo(f, sp)
+		case ".ssa":
+			return srtgears.WriteSsaTo(f, sp)
+		}
+		return
+	}
+
+	if e.Out != "" && e.Sp1 != nil {
+		if err = wf(e.Out, e.Sp1); err != nil {
+			return
+		}
+	}
+	if e.Out2 != "" && e.Sp2 != nil {
+		if err = wf(e.Out2, e.Sp2); err != nil {
+			return
+		}
+	}
+
+	return
+}
+
+// rewindForm reads form values and generates proper arguments for them.
+// Returns the updated args slice.
+func rewindForm(args []string, r *http.Request) []string {
+	if s := r.FormValue("out"); s != "" {
+		args = append(args, "-out", s)
+	}
+	if s := r.FormValue("out2"); s != "" {
+		args = append(args, "-out2", s)
+	}
 	if s := r.FormValue("concat"); s != "" {
 		args = append(args, "-concat="+s)
 	}
@@ -83,35 +203,5 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 		args = append(args, "-stats")
 	}
 
-	// Our heart: the Executor
-	var e = exec.New(w)         // If there are errors, we want them generated on the response.
-	e.FlagSet.Usage = func() {} // We don't want usage in the web response
-
-	if err := e.ProcFlags(args); err != nil {
-		return // Errors are already written to response.
-	}
-
-	// Read input files
-	if e.Sp1, err = srtgears.ReadSrtFrom(in); err != nil {
-		c.Errorf("Failed to parse uploaded file 'in': %v", err)
-		fmt.Fprint(w, "Failed to parse uploaded file: ", err)
-		return
-	}
-
-	if in2 != nil {
-		if e.Sp2, err = srtgears.ReadSrtFrom(in2); err != nil {
-			c.Errorf("Failed to parse uploaded file 'in2': %v", err)
-			fmt.Fprint(w, "Failed to parse 2nd uploaded file: ", err)
-			return
-		}
-	}
-
-	// Perform transformations
-	if err := e.GearIt(); err != nil {
-		fmt.Fprint(w, err)
-		return
-	}
-
-	// Send result, zipped
-	// TODO
+	return args
 }
