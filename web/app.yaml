@@ -12,6 +12,10 @@ handlers:
   static_files: download.html
   upload: download.html
 
+- url: /srtgears-online.html
+  static_files: srtgears-online.html
+  upload: srtgears-online
+
 - url: /static
   static_dir: static
 

@@ -73,6 +73,18 @@ h2, h3, h4 {
 	font-size: 1.05em;
 }
 
+div.info {
+	margin-top: 8px;
+	padding: 4px 0px 4px 10px;
+	border-left: 7px solid;
+	padding: 4px 0px 4px 10px;
+}
+
+div.info {
+	border-left-color: #40aa40;
+	background: #cfc;
+}
+
 .code {
 	font-family: Courier;
 	white-space: pre-wrap;
