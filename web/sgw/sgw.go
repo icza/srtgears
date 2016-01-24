@@ -7,3 +7,22 @@ and sends back the result.
 
 */
 package sgw
+
+import (
+	"appengine"
+	"fmt"
+	"net/http"
+)
+
+func init() {
+	http.HandleFunc("/srtgears-online-submit", sgwHandler)
+
+}
+
+func sgwHandler(w http.ResponseWriter, r *http.Request) {
+	c := appengine.NewContext(r)
+
+	c.Debugf("Location: %s;%s;%s;%s", r.Header.Get("X-AppEngine-Country"), r.Header.Get("X-AppEngine-Region"), r.Header.Get("X-AppEngine-City"), r.Header.Get("X-AppEngine-CityLatLong"))
+	
+	fmt.Fprint(w, "Form submit received.")
+}

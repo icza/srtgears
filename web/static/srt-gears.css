@@ -160,8 +160,43 @@ tr.alt {
 	background-color: #fec;
 }
 
-tr.highlight {
-	background-color: #ccf;
+form ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+form ul li {
+	display: block;
+	list-style-type: none;
+	clear: left;
+}
+
+form ul label {
+	margin-top: 4px;
+	float: left;
+}
+
+form input[type="text"], form select {
+	width: 160px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+span.note {
+	color: #888;
+	font-size: 0.8em;
+}
+
+fieldset {
+	padding-top: 3px;
+	padding-bottom: 7px;
+}
+
+/*================================================================================================*/
+/*====  S R T G E A R S   O N L I N E   P A G E  =================================================*/
+/*================================================================================================*/
+#sgo ul label {
+	width: 200px;
 }
 
 /*================================================================================================*/

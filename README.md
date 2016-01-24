@@ -64,11 +64,11 @@ You can see more usage examples in the [package doc](http://godoc.org/github.com
 
 ## Limits
 
-Input files must be UTF-8 encoded, output files will be UTF-8 encoded.
+Input files must be UTF-8 encoded, output files will be UTF-8 encoded as well.
 
 Supported input format is SubRip (`*.srt`) only, supported output formats are SubRip (`*.srt`) and Sub Station Alpha (`*.ssa`).
 
-It should also be noted that SubRip format specification does not include positioning. Srtgears uses an unofficial extension `{\anX}` which may not be supported by all players ([MPC-HC](https://mpc-hc.org/) has full support for it). In these cases the Sub Station Alpha output format is recommended.
+It should also be noted that SubRip format specification does not include subtitle positioning. Srtgears uses an unofficial extension `{\anX}` which may not be supported by all video players, or some players interpret the position values differently. [MPC-HC](https://mpc-hc.org/) has full support for it. In these cases the Sub Station Alpha output format is recommended (where the specification covers subtitle positioning / alignment).
 
 ## License
 

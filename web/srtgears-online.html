@@ -52,6 +52,23 @@
 				This page is an online Srtgears interface. You can also download the
 				offline <a href="/download.html">Srtgears command line tool</a>.
 			</div>
+
+			<h3>Input Form</h3>
+			<form id="sgo" action="/srtgears-online-submit" method="POST"
+				enctype="multipart/form-data" target="_blank">
+				<fieldSet>
+					<legend>Input files</legend>
+					<ul>
+						<li><label for="in">Input srt file:</label> <input
+							type="file" name="in" /></li>
+						<li><label for="in2">Optional 2nd input srt file:</label> <input
+							type="file" name="in2" /></li>
+						<li><input type="submit" id="submitGearItId"
+							name="submitGearIt" value="Gear it!" /></li>
+					</ul>
+				</fieldSet>
+			</form>
+
 		</div>
 
 		<div id="footer">Srtgears is a trademark of Andr&#225;s Belicza.
