@@ -7,3 +7,16 @@ handlers:
 - url: /
   static_files: index.html
   upload: index.html
+
+- url: /download.html
+  static_files: download.html
+  upload: download.html
+
+- url: /static
+  static_dir: static
+
+- url: /release
+  static_dir: release
+
+- url: /.*
+  script: _go_app

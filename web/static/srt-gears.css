@@ -1,0 +1,124 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial;
+	font-size: 100%;
+}
+
+#container {
+	width: 100%;
+	margin: 0px;
+	background: #fff;
+	margin: 0px;
+}
+
+a {
+	color: #22c;
+}
+
+a:hover {
+	color: #55c;
+}
+
+/*================================================================================================*/
+/*====  H E A D E R  =============================================================================*/
+/*================================================================================================*/
+#header {
+	padding: 10px;
+	background: #ccc;
+	height: 36px;
+}
+
+#header-title {
+	float: left;
+}
+
+#header-title h1 {
+	margin: 0px;
+	float: left;
+}
+
+#header-title h1 a {
+	color: #55a;
+	text-decoration: none;
+}
+
+#header-title h1 a:hover {
+	color: #77c;
+}
+
+/*================================================================================================*/
+/*====  C O N T E N T  ===========================================================================*/
+/*================================================================================================*/
+#content {
+	clear: both;
+	padding: 10px;
+}
+
+h2, h3, h4 {
+	margin: 0px;
+}
+
+#content h2 {
+	font-size: 1.6em;
+}
+
+#content h3 {
+	margin-top: 5px;
+	font-size: 1.3em;
+}
+
+#content h4 {
+	margin-top: 10px;
+	font-size: 1.05em;
+}
+
+.code {
+	font-family: Courier;
+	white-space: pre-wrap;
+	font-size: 0.8em;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
+
+th, th span.note {
+	background-color: #d80;
+	color: white;
+}
+
+th, td {
+	padding: 2px;
+}
+
+tr {
+	background: white;
+}
+
+tr.alt {
+	background-color: #fec;
+}
+
+tr.highlight {
+	background-color: #ccf;
+}
+
+/*================================================================================================*/
+/*====  F O O T E R  =============================================================================*/
+/*================================================================================================*/
+#footer {
+	clear: both;
+	padding: 6px 10px 6px 10px;
+	background: #ccc;
+	border-top: 1px solid #888;
+	font-style: italic;
+	font-size: 0.8em;
+	font-style: italic;
+	padding: 6px 10px 6px 10px;
+	padding: 6px 10px 6px 10px;
+}
