@@ -52,7 +52,7 @@ func main() {
 		return
 	}
 
-	if err := gearIt(sp1, sp2); err != nil {
+	if err := gearIt(); err != nil {
 		fmt.Println(err)
 		return
 	}
@@ -96,7 +96,7 @@ func parseTime(t string) (time.Duration, error) {
 }
 
 // gearIt performs subtitle transformations specified by the command line flags
-func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
+func gearIt() (err error) {
 	if sp1 == nil {
 		return fmt.Errorf("Input file must be specified ('-in')!")
 	}
@@ -158,7 +158,7 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 	}
 
 	if splitAt != "" {
-		at, err := parseTime(concat)
+		at, err := parseTime(splitAt)
 		if err != nil {
 			return fmt.Errorf("Invalid time for splitAt: %s", splitAt)
 		}
@@ -194,7 +194,7 @@ func gearIt(sp1, sp2 *srtgears.SubsPack) (err error) {
 // writeFiles writes the output files specified by the '-out' and '-out2' flags.
 func writeFiles() (err error) {
 	wf := func(name string, sp *srtgears.SubsPack) (err error) {
-		ext := strings.ToLower(path.Ext(out))
+		ext := strings.ToLower(path.Ext(name))
 		switch ext {
 		case ".srt":
 			return srtgears.WriteSrtFile(name, sp)
@@ -226,7 +226,7 @@ func procFlags() error {
 	flag.StringVar(&out2, "out2", "", "optional 2nd output file name (when splitting) (*.srt or *.ssa)")
 	flag.BoolVar(&srtgears.Debug, "debug", false, "print debug messages")
 	flag.StringVar(&concat, "concat", "", "concatenate 2 subtitle files, 2nd part start at e.g. '00:59:00,123'")
-	flag.BoolVar(&merge, "merge", false, "merge 2 subtitle files ('-in' at bottom, '-in2' at top")
+	flag.BoolVar(&merge, "merge", false, "merge 2 subtitle files ('-in' at bottom, '-in2' at top)")
 	flag.StringVar(&splitAt, "splitAt", "", "time where to split to 2 subtitle files ('-out' and '-out2'), e.g. '00:59:00,123'")
 	flag.IntVar(&shiftBy, "shiftBy", 0, "shift subtitle timestamps (+/- ms)")
 	flag.Float64Var(&scale, "scale", 0, "scale subtitle timestamps (faster/slower); multipler e.g. 1.001")
