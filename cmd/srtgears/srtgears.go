@@ -25,8 +25,8 @@ var (
 	merge      bool    // merge 2 subtitle files ('-in' at bottom, '-in2' at top
 	splitAt    string  // time where to split to 2 subtitle files ('-out' and '-out2'), e.g. '00:59:00,123'
 	shiftBy    int     // shift subtitle timestamps (+/- ms)
-	scale      float64 // scale subtitle timestamps (faster/slower); multipler e.g. 1.001
-	lengthen   float64 // lengthen / shorten display duration of subtitles, multipler e.g. for +10% use 1.1
+	scale      float64 // scale subtitle timestamps (faster/slower); multiplier e.g. 1.001
+	lengthen   float64 // lengthen / shorten display duration of subtitles, multiplier e.g. for +10% use 1.1
 	removeHTML bool    // strip off formatting (e.g. <i>, <b>, <u>, <font> etc.)
 	removeCtrl bool    // remove controls such as {\anX} (or {\aY}), {\pos(x,y)}
 	removeHI   bool    // remove hearing impaired subtitles (such as '[PHONE RINGING]' or '(phone ringing)')
@@ -229,8 +229,8 @@ func procFlags() error {
 	flag.BoolVar(&merge, "merge", false, "merge 2 subtitle files ('-in' at bottom, '-in2' at top)")
 	flag.StringVar(&splitAt, "splitAt", "", "time where to split to 2 subtitle files ('-out' and '-out2'), e.g. '00:59:00,123'")
 	flag.IntVar(&shiftBy, "shiftBy", 0, "shift subtitle timestamps (+/- ms)")
-	flag.Float64Var(&scale, "scale", 0, "scale subtitle timestamps (faster/slower); multipler e.g. 1.001")
-	flag.Float64Var(&lengthen, "lengthen", 0, "lengthen / shorten display duration of subtitles, multipler e.g. for +10% use 1.1")
+	flag.Float64Var(&scale, "scale", 0, "scale subtitle timestamps (faster/slower); multiplier e.g. 1.001")
+	flag.Float64Var(&lengthen, "lengthen", 0, "lengthen / shorten display duration of subtitles, multiplier e.g. for +10% use 1.1")
 	flag.BoolVar(&removeHTML, "removehtml", false, "strip off formatting (e.g. <i>, <b>, <u>, <font> etc.)")
 	flag.BoolVar(&removeCtrl, "removectrl", false, `remove controls such as {\anX} (or {\aY}), {\pos(x,y)}`)
 	flag.BoolVar(&removeHI, "removehi", false, "remove hearing impaired subtitles (such as '[PHONE RINGING]' or '(phone ringing)')")

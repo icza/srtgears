@@ -52,17 +52,93 @@
 				This page is an online Srtgears interface. You can also download the
 				offline <a href="/download.html">Srtgears command line tool</a>.
 			</div>
-
-			<h3>Input Form</h3>
+			<h3>Input form</h3>
+			<p>You only have to fill the fields you want to perform on your
+				subtitle files.</p>
 			<form id="sgo" action="/srtgears-online-submit" method="POST"
 				enctype="multipart/form-data" target="_blank">
 				<fieldSet>
-					<legend>Input files</legend>
 					<ul>
-						<li><label for="in">Input srt file:</label> <input
-							type="file" name="in" /></li>
-						<li><label for="in2">Optional 2nd input srt file:</label> <input
-							type="file" name="in2" /></li>
+						<li><label for="inId">Input srt file:</label> <input
+							type="file" id="inId" name="in" /></li>
+						<li><label for="in2Id">Optional 2nd input srt file:</label> <input
+							type="file" id="in2Id" name="in2" /></li>
+
+						<li><label for="outId">Output file name:</label> <input
+							type="text" id="outId" name="out" /> <span class="note">output
+								file name (*.srt or *.ssa)</span></li>
+						<li><label for="out2Id">Optional 2nd output file
+								name:</label> <input type="text" id="out2Id" name="out2" /> <span
+							class="note">optional 2nd output file name (when
+								splitting) (*.srt or *.ssa)</span></li>
+
+						<li><label for="concatId">Concatenate:</label> <input
+							type="text" id="concatId" name="concat" /> <span class="note">concatenate
+								2 subtitle files, 2nd part start at e.g. ''00:59:00,123'</span></li>
+
+						<li><label for="mergeId">Merge:</label> <input
+							type="checkbox" id="mergeId" name="merge" value="merge" /> <span
+							class="note">merge 2 subtitle files (first at bottom,
+								second at top)</span></li>
+
+						<li><label for="lengthenId">Lengthen:</label> <input
+							type="text" id="lengthenId" name="lengthen" /> <span
+							class="note">lengthen / shorten display duration of
+								subtitles, multiplier e.g. for +10% use 1.1</span></li>
+
+						<li><label for="removectrlId">Remove controls:</label> <input
+							type="checkbox" id="removectrlId" name="removectrl"
+							value="removectrl" /> <span class="note">remove controls
+								such as {\anX} (or {\aY}, {\pos(x,y)})</span></li>
+
+						<li><label for="removehiId">Remove hearing impaired:</label>
+							<input type="checkbox" id="removehiId" name="removehi"
+							value="removehi" /> <span class="note">remove hearing
+								impaired subtitles (such as '[PHONE RINGING]' or '(phone
+								ringing)')</span></li>
+
+						<li><label for="removehtmlId">Remove HTML:</label> <input
+							type="checkbox" id="removehtmlId" name="removehtml"
+							value="removehtml" /> <span class="note">strip off
+								formatting (such as &lt;i&gt;, &lt;b&gt;, &lt;u&gt;,
+								&lt;font&gt;)</span></li>
+
+						<li><label for="posId">Position</label> <select id="posId"
+							name="pos">
+								<option value=""></option>
+								<option value="BL">Bottom Left</option>
+								<option value="B">Bottom</option>
+								<option value="BR">Bottom Right</option>
+								<option value="L">Left</option>
+								<option value="C">Center</option>
+								<option value="R">Right</option>
+								<option value="TL">Top Left</option>
+								<option value="T">Top</option>
+								<option value="TR">Top Right</option>
+						</select><span class="note">change subtitle position</span></li>
+
+						<li><label for="colorId">Color:</label> <input type="text"
+							id="colorId" name="color" /> <span class="note">change
+								subtitle color, name (e.g. 'red' or 'yellow') or RGB hexa
+								'#rrggbb' (e.g. '#ff0000' for red)</span></li>
+
+						<li><label for="scaleId">Scale:</label> <input type="text"
+							id="scaleId" name="scale" /> <span class="note">scale
+								subtitle timestamps (faster/slower); multiplier e.g. 1.001</span></li>
+
+						<li><label for="shiftById">Shift by:</label> <input
+							type="text" id="shiftById" name="shiftBy" /> <span class="note">shift
+								subtitle timestamps (+/- ms)</span></li>
+
+						<li><label for="splitAtId">Split at:</label> <input
+							type="text" id="splitAtId" name="splitAt" /> <span class="note">time
+								where to split to 2 subtitle files (first and second output
+								files), e.g. '00:59:00,123'</span></li>
+
+						<li><label for="statsId">Stats:</label> <input
+							type="checkbox" id="statsId" name="stats" value="stats" /> <span
+							class="note">analyze file and print statistics</span></li>
+
 						<li><input type="submit" id="submitGearItId"
 							name="submitGearIt" value="Gear It!" /></li>
 					</ul>

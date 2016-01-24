@@ -34,6 +34,8 @@ https://srt-gears.appspot.com/srtgears-online.html
 
 The web interface is a Google App Engine project, implemented using the Go Appengine SDK. The server side of the web interface uses the srtgears engine (see below).
 
+The `web` folder is the root of the App Engine project.
+
 ### 3. Srtgears engine: a Go package
 
 And last (but not least) a Go package for developers. The engine was designed to be independent from the command line and web interfaces, its API is clear, well documented and easy-to-use.

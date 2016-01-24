@@ -182,6 +182,10 @@ form input[type="text"], form select {
 	margin-bottom: 2px;
 }
 
+form select {
+	margin-right: 4px;
+}
+
 span.note {
 	color: #888;
 	font-size: 0.8em;
@@ -196,7 +200,11 @@ fieldset {
 /*====  S R T G E A R S   O N L I N E   P A G E  =================================================*/
 /*================================================================================================*/
 #sgo ul label {
-	width: 200px;
+	width: 220px;
+}
+
+#sgo input[type="checkbox"] {
+	margin: 3px 147px 5px 0px;
 }
 
 /*================================================================================================*/
