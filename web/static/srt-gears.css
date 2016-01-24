@@ -48,6 +48,50 @@ a:hover {
 }
 
 /*================================================================================================*/
+/*====  N A V I G A T I O N  =====================================================================*/
+/*================================================================================================*/
+#navigation {
+	width: 100%;
+	float: left;
+	background: #333;
+}
+
+#navigation {
+	background: #333;
+}
+
+#navigation ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+#navigation li {
+	display: inline;
+	list-style-type: none;
+}
+
+#navigation li a {
+	display: block;
+	float: left;
+	text-decoration: none;
+	color: #fff;
+	padding: 5px 10px;
+	border-right: 1px solid #fff;
+}
+
+#navigation li a.selected {
+	background: #383;
+}
+
+#navigation li a:hover {
+	background: #44a;
+}
+
+#navigation li a:hover.selected {
+	background: #4a4;
+}
+
+/*================================================================================================*/
 /*====  C O N T E N T  ===========================================================================*/
 /*================================================================================================*/
 #content {
