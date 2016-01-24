@@ -40,6 +40,10 @@ type Executor struct {
 	Color      string  // change subtitle color, name (e.g. 'red' or 'yellow') or RGB hexa '#rrggbb' (e.g.'#ff0000' for red)
 	Stats      bool    // analyze file and print statistics
 
+	// Callback function to be called if stats "transformation" to be performed and no errors occured.
+	// Stats is special because it is the only transformation that produces output to Output (and not to file).
+	BeforeStats func()
+
 	Sp1, Sp2 *srtgears.SubsPack // SubsPacks to operate on. Must be set by the user before calling GearIt()!
 }
 
@@ -181,6 +185,9 @@ func (e *Executor) GearIt() (err error) {
 	}
 
 	if e.Stats {
+		if e.BeforeStats != nil {
+			e.BeforeStats()
+		}
 		ss := sp1.Stats()
 		fmt.Fprintf(e.output, "STATS of %s:\n", e.In)
 		p := func(name string, value interface{}) {

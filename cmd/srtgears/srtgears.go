@@ -42,6 +42,9 @@ func main() {
 		return
 	}
 
+	if e.Stats {
+		return // Stats modifies the subtitles, omit writing to files.
+	}
 	if err := writeFiles(); err != nil {
 		fmt.Println(err)
 		return

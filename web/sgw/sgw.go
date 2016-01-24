@@ -78,6 +78,10 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// We want stats in plain text...
+	e.BeforeStats = func() {
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	}
 	// Perform transformations
 	if err := e.GearIt(); err != nil {
 		fmt.Fprint(w, err)
