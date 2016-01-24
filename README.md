@@ -22,15 +22,19 @@ Srtgears is available as a command line tool for easy, fast, scriptable and repe
 
 Binary (compiled) distributions are available on the download page:
 
-https://srt-gears.appspot.com/downloads
+https://srt-gears.appspot.com/download.html
+
+The command line tool uses only the Go standard library and the srtgears engine (see below).
 
 ### 2. Web interface: online web page
 
 Srtgears can also be used on the web for those who do not want to download just the tool from the browser. It can be found here:
 
-https://srt-gears.appspot.com/srtgears-online
+https://srt-gears.appspot.com/srtgears-online.html
 
-### 3. Go package
+The web interface is a Google App Engine project, implemented using the Go Appengine SDK. The server side of the web interface uses the srtgears engine (see below).
+
+### 3. Srtgears engine: a Go package
 
 And last (but not least) a Go package for developers. The engine was designed to be independent from the command line and web interfaces, its API is clear, well documented and easy-to-use.
 
@@ -42,7 +46,11 @@ Documentation can be found at:
 
 http://godoc.org/github.com/gophergala2016/srtgears
 
-For example to merge 2 subtitle files to have a dual sub, it can be done as:
+To use the engine, first import it:
+
+    import "github.com/gophergala2016/srtgears"
+
+And for example using the engine to merge 2 subtitle files to have a dual sub:
 
 	sp1, err := srtgears.ReadSrtFile("eng.srt")
 	// check err
@@ -51,7 +59,8 @@ For example to merge 2 subtitle files to have a dual sub, it can be done as:
 	sp1.Merge(sp2)
 	err = srtgears.WriteSrtFile("eng+hun.srt", sp1);
 	// check err
-    
+
+You can see more usage examples in the [package doc](http://godoc.org/github.com/gophergala2016/srtgears).    
 
 ## Limits
 
