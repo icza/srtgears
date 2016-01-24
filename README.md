@@ -59,7 +59,7 @@ Input files must be UTF-8 encoded, output files will be UTF-8 encoded.
 
 Supported input format is SubRip (`*.srt`) only, supported output formats are SubRip (`*.srt`) and Sub Station Alpha (`*.ssa`).
 
-It should also be noted that SubRip format specification does not include positioning. Srtgears uses an unofficial extension `{\anX}` which may not be supported by all players. In these cases the Sub Station Alpha output format is recommended.
+It should also be noted that SubRip format specification does not include positioning. Srtgears uses an unofficial extension `{\anX}` which may not be supported by all players ([MPC-HC](https://mpc-hc.org/) has full support for it). In these cases the Sub Station Alpha output format is recommended.
 
 ## License
 

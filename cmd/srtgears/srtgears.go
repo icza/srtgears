@@ -255,7 +255,7 @@ Merge 2 files to have a dual sub:
     srtgears -in eng.srt -in2 hun.srt -out eng+hun.srt
 Concatenate 2 files where 2nd part of the movie starts at 51 min 15 sec:
     srtgears -in cd1.srt -in2 cd2.srt -out cd12.srt -concat=00:51:15:00,000
-Change subtitle color to yellow, move to top, remove hearing impaired lines and increase display duration by 10%:
-    srtgears -in eng.srt -out eng2.srt -color=yellow -pos=T -removehi -lengthen=1.1
+Change subtitle color to yellow, move to top, remove HI lines, increase display duration by 10% and save as *.ssa:
+    srtgears -in eng.srt -out eng2.ssa -color=yellow -pos=T -removehi -lengthen=1.1
 Repair: do nothing, just parse and re-save
     srtgears -in eng.srt -out eng2.srt`

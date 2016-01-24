@@ -110,7 +110,7 @@ func WriteSsaTo(w io.Writer, sp *SubsPack) (err error) {
 	// Script Info section
 	wr.prn("[Script Info]") // This must be the first line
 	wr.prn("; This is a Sub Station Alpha v4 script.")
-	wr.prn(";", HomePage)
+	wr.prn("; ", HomePage)
 	wr.prn("Title: ")
 	wr.prn("Script Updated By: srtgears version ", Version)
 	wr.prn("ScriptType: v4.00")
@@ -168,7 +168,7 @@ func WriteSsaTo(w io.Writer, sp *SubsPack) (err error) {
 
 		// Texts
 		for i, line := range s.Lines {
-			// TODO remove html formatting?
+			// Note: HTML and controls not need to be removed (they will by the player)
 			wr.pr(line)
 			if i != len(s.Lines)-1 {
 				wr.pr(`\n`)

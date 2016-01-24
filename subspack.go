@@ -174,7 +174,7 @@ type SubsStats struct {
 }
 
 // Stats analyzes the subtitle pack and returns various statistics.
-// Subtitles will be modified.
+// Subtitles will be modified so you should not attempt to save it after calling this.
 func (sp *SubsPack) Stats() *SubsStats {
 	ss := SubsStats{
 		Subs: len(sp.Subs),
