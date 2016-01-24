@@ -18,6 +18,7 @@ import (
 	"net/http"
 	"path"
 	"strings"
+	"time"
 )
 
 func init() {
@@ -28,7 +29,8 @@ func init() {
 func sgwHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
-	c.Debugf("Location: %s;%s;%s;%s", r.Header.Get("X-AppEngine-Country"), r.Header.Get("X-AppEngine-Region"), r.Header.Get("X-AppEngine-City"), r.Header.Get("X-AppEngine-CityLatLong"))
+	c.Debugf("Location: %s;%s;%s;%s", r.Header.Get("X-AppEngine-Country"), r.Header.Get("X-AppEngine-Region"),
+		r.Header.Get("X-AppEngine-City"), r.Header.Get("X-AppEngine-CityLatLong"))
 
 	args := []string{} // To simulate command line arguments
 
@@ -82,6 +84,10 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if e.Stats {
+		return // If stats was specified, response is already committed.
+	}
+
 	// Everything went ok. We can now generate and send the transformed subtitles.
 	if err := sendSubs(w, e); err != nil {
 		c.Errorf("Failed to send subtitles: %v", err)
@@ -122,6 +128,10 @@ func sendSubs(w http.ResponseWriter, e *exec.Executor) (err error) {
 		fmt.Fprint(w, "No output file has been specified.")
 		return
 	}
+	if fileCount == 2 && e.Out == e.Out2 {
+		fmt.Fprint(w, "The 2 output file names cannot be the same!")
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/zip")
 	w.Header().Set("Content-Disposition", "attachment; filename=subpack.zip")
@@ -131,7 +141,9 @@ func sendSubs(w http.ResponseWriter, e *exec.Executor) (err error) {
 
 	wf := func(name string, sp *srtgears.SubsPack) (err error) {
 		var f io.Writer
-		if f, err = zw.Create(e.Out); err != nil {
+		fh := &zip.FileHeader{Name: name}
+		fh.SetModTime(time.Now())
+		if f, err = zw.CreateHeader(fh); err != nil {
 			return
 		}
 		switch ext := strings.ToLower(path.Ext(name)); ext {
