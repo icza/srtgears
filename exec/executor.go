@@ -12,6 +12,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/gophergala2016/srtgears"
+	"io"
 	"regexp"
 	"strconv"
 	"time"
@@ -20,6 +21,7 @@ import (
 // Executor is a helper type of which you can execute subtitle transformations defined by a series of arguments.
 type Executor struct {
 	FlagSet *flag.FlagSet // Custom Flagset used to parse parameters
+	output  io.Writer     // Output used to write error messages and stats ('-stats' param)
 
 	In         string  // input file name (*.srt)
 	Out        string  // output file name (*.srt or *.ssa)
@@ -42,10 +44,18 @@ type Executor struct {
 }
 
 // New creates a new Executor.
-func New() *Executor {
-	return &Executor{
+func New(output io.Writer) *Executor {
+	e := &Executor{
 		FlagSet: flag.NewFlagSet("name", flag.ContinueOnError),
 	}
+	e.SetOutput(output)
+	return e
+}
+
+// SetOutput sets the output for error messages and stats ('-stats' param).
+func (e *Executor) SetOutput(output io.Writer) {
+	e.output = output
+	e.FlagSet.SetOutput(output)
 }
 
 // ProcFlags sets up variables for parsing the arguments, pointing to the fields of the Executor.
@@ -172,9 +182,9 @@ func (e *Executor) GearIt() (err error) {
 
 	if e.Stats {
 		ss := sp1.Stats()
-		fmt.Printf("STATS of %s:\n", e.In)
+		fmt.Fprintf(e.output, "STATS of %s:\n", e.In)
 		p := func(name string, value interface{}) {
-			fmt.Printf("%-29s: %v\n", name, value)
+			fmt.Fprintf(e.output, "%-29s: %v\n", name, value)
 		}
 		p("Total # of subtitles", ss.Subs)
 		p("Lines", ss.Lines)

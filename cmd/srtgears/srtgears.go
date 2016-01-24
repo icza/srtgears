@@ -15,7 +15,7 @@ import (
 )
 
 // Our heart: the Executor
-var e = exec.New()
+var e = exec.New(os.Stdout)
 
 func main() {
 	fmt.Printf("Srtgears %s, home page: %s\n", srtgears.Version, srtgears.HomePage)
