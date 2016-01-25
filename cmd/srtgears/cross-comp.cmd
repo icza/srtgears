@@ -1,4 +1,4 @@
-set version=0.9
+set version=1.0
 
 set GOOS=windows
 set GOARCH=amd64

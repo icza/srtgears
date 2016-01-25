@@ -6,8 +6,9 @@ Srtgears provides some very handy features which are not available in other subt
 
 - merge 2 subtitle files to have dual subs: one at the bottom, one at the top (this is not concatenation, but that's also supported)
 - lengthen / shorten display duration of subtitles (if you're a slow reader, you're gonna appreciate this :))
-- remove hearing impaired texts (such as "[PHONE RINGING]" or "(phone ringing)")
-- strip off formatting (such as &lt;i&gt;, &lt;b&gt;, &lt;u&gt;, &lt;font&gt;) 
+- remove hearing impaired (HI) texts (such as "[PHONE RINGING]" or "(phone ringing)")
+- strip off formatting (such as &lt;i&gt;, &lt;b&gt;, &lt;u&gt;, &lt;font&gt;)
+- split the subtitle file at a specified time 
 - statistics from the subtitles
 - etc...
 
@@ -28,7 +29,7 @@ The command line tool uses only the Go standard library and the srtgears engine 
 
 ### 2. Web interface: online web page
 
-Srtgears can also be used on the web for those who do not want to download the tool just it out from the browser. It can be found here:
+Srtgears can also be used on the web for those who do not want to download the tool just try it out from the browser. It can be found here:
 
 https://srt-gears.appspot.com/srtgears-online.html
 

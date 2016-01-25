@@ -48,6 +48,7 @@
 
 		<div id="content">
 			<h2>Home</h2>
+
 			<p>Srtgears&#8482; is a subtitle engine for reading subtitle
 				files, manipulating / transforming them and then saving the result
 				into another file.</p>
@@ -59,39 +60,45 @@
 					supported)</li>
 				<li>lengthen / shorten display duration of subtitles (if you're
 					a slow reader, you're gonna appreciate this :))</li>
-				<li>remove hearing impaired texts (such as "[PHONE RINGING]" or
-					"(phone ringing)")</li>
+				<li>remove hearing impaired (HI) texts (such as "[PHONE
+					RINGING]" or "(phone ringing)")</li>
 				<li>strip off formatting (such as &lt;i&gt;, &lt;b&gt;,
 					&lt;u&gt;, &lt;font&gt;)</li>
+				<li>split the subtitle file at a specified time</li>
 				<li>statistics from the subtitles</li>
 				<li>etc...</li>
 			</ul>
 
 			<h3>Presentation</h3>
-			<p>The Srtgears engine is presented in 3 ways:</p>
-			<ol>
-				<li>Srtgears is available as a <i>command line tool</i> for
-					easy, fast, scriptable and repeatable usage.<br> Binary
-					(compiled) distributions are available on the <a
-					href="/download.html">Downloads</a> page.
-				</li>
-				<li>Web interface: <i>online web page</i><br> Srtgears can
-					also be used on the web for those who do not want to download the
-					tool just it out from the browser. It can be found on the <a
-					href="/download.html">Srtgears online</a> page.
-				</li>
-				<li>Srtgears engine: a <i>Go package</i> (for developers)<br>
-					And last (but not least) a Go package for developers. The engine
-					was designed to be independent from the command line and web
-					interfaces, its API is clear, well documented and easy-to-use.<br>
-					To get the source code (along with the sources of the tool and web
-					interface), documentation and more visit the source code
-					repository:<br> <a
-					href="https://github.com/gophergala2016/srtgears" target="_blank">https://github.com/gophergala2016/srtgears</a>
-				</li>
-			</ol>
 
-			<h3>Limits</h3>
+			<p>The Srtgears engine is presented in 3 ways:</p>
+
+			<h4>1. Command line tool</h4>
+			<p>
+				Srtgears is available as a <i>command line tool</i> for easy, fast,
+				scriptable and repeatable usage.<br> Binary (compiled)
+				distributions are available on the <a href="/download.html">Downloads</a>
+				page.
+			</p>
+
+			<h4>2. Web interface: online web page</h4>
+			<p>
+				Srtgears can also be used on the web for those who do not want to
+				download the tool just try it out from the browser. It can be found
+				on the <a href="/srtgears-online.html">Srtgears online</a> page.
+			</p>
+
+			<h4>3. Srtgears engine: a Go package</h4>
+			<p>
+				And last (but not least) a Go package for developers. The engine was
+				designed to be independent from the command line and web interfaces,
+				its API is clear, well documented and easy-to-use.<br> To get
+				the source code (along with the sources of the tool and web
+				interface), documentation and more visit the source code repository:<br>
+				<a href="https://github.com/gophergala2016/srtgears" target="_blank">https://github.com/gophergala2016/srtgears</a>
+			</p>
+
+			<h3 id="Limits">Limits</h3>
 			<p>Input files must be UTF-8 encoded, output files will be UTF-8
 				encoded as well.</p>
 			<p>Supported input format is SubRip (*.srt) only, supported
