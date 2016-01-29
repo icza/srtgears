@@ -43,15 +43,15 @@ And last (but not least) a Go package for developers. The engine was designed to
 
 To get the source code (along with the sources of the tool and web interface), use `go get`:
 
-    go get github.com/gophergala2016/srtgears
+    go get github.com/icza/srtgears
     
 Documentation can be found at:
 
-http://godoc.org/github.com/gophergala2016/srtgears
+http://godoc.org/github.com/icza/srtgears
 
 To use the engine, first import it:
 
-    import "github.com/gophergala2016/srtgears"
+    import "github.com/icza/srtgears"
 
 And for example using the engine to merge 2 subtitle files to have a dual sub saved in Sub Station Alpha (*.ssa) format:
 
@@ -63,9 +63,9 @@ And for example using the engine to merge 2 subtitle files to have a dual sub sa
 	err = srtgears.WriteSsaFile("eng+hun.ssa", sp1);
 	// check err
 
-You can see more usage examples in the [package doc](http://godoc.org/github.com/gophergala2016/srtgears).
+You can see more usage examples in the [package doc](http://godoc.org/github.com/icza/srtgears).
 
-Also worth noting that the subtitle transformations of the command line tool and the web interface are driven by the same `Executor`, it is "outsourced" to the `github.com/gophergala2016/srtgears/exec` package.
+Also worth noting that the subtitle transformations of the command line tool and the web interface are driven by the same `Executor`, it is "outsourced" to the `github.com/icza/srtgears/exec` package.
 
 **Instructions to fire up the web interface locally:**
 
@@ -83,4 +83,4 @@ It should also be noted that SubRip format specification does not include subtit
 
 ## License
 
-See [LICENSE](https://github.com/gophergala2016/srtgears/blob/master/LICENSE.md)
+See [LICENSE](https://github.com/icza/srtgears/blob/master/LICENSE.md)

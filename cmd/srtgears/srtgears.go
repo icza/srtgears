@@ -32,7 +32,7 @@ func main() {
 		return
 	}
 
-	if len(os.Args) < 2 {
+	if len(os.Args) < 2 { // 0 arguments, print usage
 		e.FlagSet.Usage()
 	}
 
