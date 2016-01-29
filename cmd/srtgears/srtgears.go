@@ -7,8 +7,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/gophergala2016/srtgears"
-	"github.com/gophergala2016/srtgears/exec"
+	"github.com/icza/srtgears"
+	"github.com/icza/srtgears/exec"
 	"os"
 	"path"
 	"strings"

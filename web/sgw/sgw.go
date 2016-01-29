@@ -1,3 +1,5 @@
+// +build appengine
+
 /*
 
 Package sgw is the backend logic for the online Srtgears.
@@ -12,8 +14,8 @@ import (
 	"appengine"
 	"archive/zip"
 	"fmt"
-	"github.com/gophergala2016/srtgears"
-	"github.com/gophergala2016/srtgears/exec"
+	"github.com/icza/srtgears"
+	"github.com/icza/srtgears/exec"
 	"io"
 	"net/http"
 	"path"

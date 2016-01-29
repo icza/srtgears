@@ -11,7 +11,7 @@ package exec
 import (
 	"flag"
 	"fmt"
-	"github.com/gophergala2016/srtgears"
+	"github.com/icza/srtgears"
 	"io"
 	"regexp"
 	"strconv"
