@@ -29,7 +29,7 @@ type Executor struct {
 	Out2       string  // optional 2nd output file name (when splitting) (*.srt or *.ssa)
 	Concat     string  // concatenate 2 subtitle files, 2nd part start at e.g. '00:59:00,123'
 	Merge      bool    // merge 2 subtitle files ('-in' at bottom, '-in2' at top
-	SplitAt    string  // time where to split to 2 subtitle files ('-out' and '-out2'), e.g. '00:59:00,123'
+	SplitAt    string  // time at which to split to 2 subtitle files ('-out' and '-out2'), e.g. '00:59:00,123'
 	ShiftBy    int     // shift subtitle timestamps (+/- ms)
 	Scale      float64 // scale subtitle timestamps (faster/slower); multiplier e.g. 1.001
 	Lengthen   float64 // lengthen / shorten display duration of subtitles, multiplier e.g. for +10% use 1.1
@@ -74,7 +74,7 @@ func (e *Executor) ProcFlags(arguments []string) error {
 	f.BoolVar(&srtgears.Debug, "debug", false, "print debug messages")
 	f.StringVar(&e.Concat, "concat", "", "concatenate 2 subtitle files, 2nd part start at e.g. '00:59:00,123'")
 	f.BoolVar(&e.Merge, "merge", false, "merge 2 subtitle files ('-in' at bottom, '-in2' at top)")
-	f.StringVar(&e.SplitAt, "splitAt", "", "time where to split to 2 subtitle files ('-out' and '-out2'), e.g. '00:59:00,123'")
+	f.StringVar(&e.SplitAt, "splitAt", "", "time at which to split to 2 subtitle files ('-out' and '-out2'), e.g. '00:59:00,123'")
 	f.IntVar(&e.ShiftBy, "shiftBy", 0, "shift subtitle timestamps (+/- ms)")
 	f.Float64Var(&e.Scale, "scale", 0, "scale subtitle timestamps (faster/slower); multiplier e.g. 1.001")
 	f.Float64Var(&e.Lengthen, "lengthen", 0, "lengthen / shorten display duration of subtitles, multiplier e.g. for +10% use 1.1")

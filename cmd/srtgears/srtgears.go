@@ -32,6 +32,10 @@ func main() {
 		return
 	}
 
+	if len(os.Args) < 2 {
+		e.FlagSet.Usage()
+	}
+
 	if err := readFiles(); err != nil {
 		fmt.Println(err)
 		return
