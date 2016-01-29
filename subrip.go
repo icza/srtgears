@@ -130,7 +130,7 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 					debugf("Invalid sequence number in line %d: %s", lineNum, line)
 				}
 			}
-			// discard seq#, we generate sequence numbres when writing
+			// discard seq#, we generate sequence numbers when writing
 			s = &Subtitle{}
 			phase++
 		case 1: // wanting timestamps
@@ -192,7 +192,7 @@ func parseTimestamps(s *Subtitle, line string, lineNum int) {
 	}
 }
 
-// WriteSrtFile generates SubRip format and writes it to a file.
+// WriteSrtFile generates SubRip format (*.srt) and writes it to a file.
 func WriteSrtFile(name string, sp *SubsPack) (err error) {
 	f, err := os.Create(name)
 	if err != nil {
@@ -203,7 +203,7 @@ func WriteSrtFile(name string, sp *SubsPack) (err error) {
 	return WriteSrtTo(f, sp)
 }
 
-// WriteSrtTo generates SubRip format and writes it to an io.Writer.
+// WriteSrtTo generates SubRip format (*.srt) and writes it to an io.Writer.
 func WriteSrtTo(w io.Writer, sp *SubsPack) error {
 	wr := &writer{w: w}
 

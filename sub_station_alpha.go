@@ -51,7 +51,7 @@ var modelPosToSsaPos = map[Pos]int{
 	BottomLeft: 1, Bottom: 2, BottomRight: 3,
 }
 
-// WriteSsaFile generates Sub Station Alpha format and writes it to a file.
+// WriteSsaFile generates Sub Station Alpha format (*.ssa) and writes it to a file.
 func WriteSsaFile(name string, sp *SubsPack) (err error) {
 	f, err := os.Create(name)
 	if err != nil {
@@ -103,7 +103,7 @@ func keyFromSub(s *Subtitle) (k styleKey) {
 	return
 }
 
-// WriteSsaTo generates Sub Station Alpha format and writes it to an io.Writer.
+// WriteSsaTo generates Sub Station Alpha format (*.ssa) and writes it to an io.Writer.
 func WriteSsaTo(w io.Writer, sp *SubsPack) (err error) {
 	wr := &writer{w: w}
 
@@ -168,7 +168,7 @@ func WriteSsaTo(w io.Writer, sp *SubsPack) (err error) {
 
 		// Texts
 		for i, line := range s.Lines {
-			// Note: HTML and controls not need to be removed (they will by the player)
+			// Note: HTML and controls not need to be removed (they are handled by video players)
 			wr.pr(line)
 			if i != len(s.Lines)-1 {
 				wr.pr(`\n`)

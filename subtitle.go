@@ -35,7 +35,7 @@ type Subtitle struct {
 	TimeOut time.Duration // Timestamp when subtitle disappears
 	Lines   []string      // Lines of text to be displayed
 	Pos     Pos           // Position where to display it
-	Color   string        // Color of the text, HTML ARGB format
+	Color   string        // Color of the text, HTML RRGGBB format or a color name
 }
 
 // DisplayDuration returns the duration for which the subtitle is visible.
@@ -76,7 +76,7 @@ func (s *Subtitle) Scale(factor float64) {
 	s.TimeOut = s.TimeIn + dispdur
 }
 
-// Lengthen lenthens the display duration of the subtitle.
+// Lengthen lengthens the display duration of the subtitle.
 func (s *Subtitle) Lengthen(factor float64) {
 	newDur := time.Duration(float64(s.DisplayDuration()) * factor)
 	center := (s.TimeIn + s.TimeOut) / 2
