@@ -21,3 +21,5 @@ go build -ldflags "-X main.Version=%version%" -o srtgears-%version%-%GOOS%-%GOAR
 
 set GOOS=windows
 set GOARCH=amd64
+
+pause

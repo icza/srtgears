@@ -61,10 +61,14 @@
 					supported)</li>
 				<li>lengthen / shorten display duration of subtitles (if you're
 					a slow reader, you're gonna appreciate this :))</li>
-				<li>remove hearing impaired (HI) texts (such as "[PHONE
-					RINGING]" or "(phone ringing)")</li>
-				<li>strip off formatting (such as &lt;i&gt;, &lt;b&gt;,
-					&lt;u&gt;, &lt;font&gt;)</li>
+				<li>remove hearing impaired (HI) texts (such as <span
+					class="code">"[PHONE RINGING]"</span> or <span class="code">"(phone
+						ringing)"</span>)
+				</li>
+				<li>strip off formatting (such as <span class="code">&lt;i&gt;</span>,
+					<span class="code">&lt;b&gt;</span>, <span class="code">&lt;u&gt;</span>,
+					<span class="code">&lt;font&gt;</span>)
+				</li>
 				<li>split the subtitle file at a specified time</li>
 				<li>statistics from the subtitles</li>
 				<li>etc...</li>
@@ -102,22 +106,25 @@
 			<h3 id="Limits">Limits</h3>
 			<p>Input files must be UTF-8 encoded, output files will be UTF-8
 				encoded as well.</p>
-			<p>Supported input format is SubRip (*.srt) only, supported
-				output formats are SubRip (*.srt) and Sub Station Alpha (*.ssa).</p>
+			<p>
+				Supported input format is SubRip (<span class="code">*.srt</span>)
+				only, supported output formats are SubRip (<span class="code">*.srt</span>)
+				and Sub Station Alpha (<span class="code">*.ssa</span>).
+			</p>
 			<p>
 				It should also be noted that SubRip format specification does not
 				include subtitle positioning. Srtgears uses an unofficial extension
-				'{\anX}' which may not be supported by all video players, or some
-				players interpret the position values differently. <a
-					href="https://mpc-hc.org/" target="_blank">MPC-HC</a> has full
-				support for it. In these cases the Sub Station Alpha output format
-				is recommended (where the specification covers subtitle positioning
-				/ alignment).
+				<span class="code">{\anX}</span> which may not be supported by all
+				video players, or some players interpret the position values
+				differently. <a href="https://mpc-hc.org/" target="_blank">MPC-HC</a>
+				has full support for it. In these cases the Sub Station Alpha output
+				format is recommended (where the specification covers subtitle
+				positioning / alignment).
 			</p>
 
 			<h3>Story</h3>
 			<p>
-				Srtgears is started as a 48-hour work created for the <a
+				Srtgears started as a 48-hour work created for the <a
 					href="http://gophergala.com/" target="_blank">Gopher Gala 2016</a>
 				event. The initial version can be found <a
 					href="https://github.com/gophergala2016/srtgears" target="_blank">here</a>.

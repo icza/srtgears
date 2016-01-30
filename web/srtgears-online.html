@@ -70,15 +70,19 @@
 
 						<li><label for="outId">Output file name:</label> <input
 							type="text" id="outId" name="out" /> <span class="note">output
-								file name (*.srt or *.ssa)</span></li>
+								file name (<span class="code">*.srt</span> or <span class="code">*.ssa</span>)
+						</span></li>
 						<li><label for="out2Id">Optional 2nd output file
 								name:</label> <input type="text" id="out2Id" name="out2" /> <span
 							class="note">optional 2nd output file name (when
-								splitting) (*.srt or *.ssa)</span></li>
+								splitting) (<span class="code">*.srt</span> or <span
+								class="code">*.ssa</span>)
+						</span></li>
 
 						<li><label for="concatId">Concatenate:</label> <input
 							type="text" id="concatId" name="concat" /> <span class="note">concatenate
-								2 subtitle files, 2nd part start at e.g. ''00:59:00,123'</span></li>
+								2 subtitle files, 2nd part start at e.g. <span class="code">00:59:00,123</span>
+						</span></li>
 
 						<li><label for="mergeId">Merge:</label> <input
 							type="checkbox" id="mergeId" name="merge" value="merge" /> <span
@@ -88,24 +92,30 @@
 						<li><label for="lengthenId">Lengthen:</label> <input
 							type="text" id="lengthenId" name="lengthen" /> <span
 							class="note">lengthen / shorten display duration of
-								subtitles, multiplier e.g. for +10% use 1.1</span></li>
+								subtitles, multiplier e.g. for +10% use <span class="code">1.1</span>
+						</span></li>
 
 						<li><label for="removectrlId">Remove controls:</label> <input
 							type="checkbox" id="removectrlId" name="removectrl"
 							value="removectrl" /> <span class="note">remove controls
-								such as {\anX} (or {\aY}, {\pos(x,y)})</span></li>
+								such as <span class="code">{\anX}</span> (or <span class="code">{\aY}</span>,
+								<span class="code">{\pos(x,y)}</span>)
+						</span></li>
 
 						<li><label for="removehiId">Remove hearing impaired:</label>
 							<input type="checkbox" id="removehiId" name="removehi"
 							value="removehi" /> <span class="note">remove hearing
-								impaired subtitles (such as '[PHONE RINGING]' or '(phone
-								ringing)')</span></li>
+								impaired subtitles (such as <span class="code">'[PHONE
+									RINGING]'</span> or <span class="code">'(phone ringing)'</span>)
+						</span></li>
 
 						<li><label for="removehtmlId">Remove HTML:</label> <input
 							type="checkbox" id="removehtmlId" name="removehtml"
 							value="removehtml" /> <span class="note">strip off
-								formatting (such as &lt;i&gt;, &lt;b&gt;, &lt;u&gt;,
-								&lt;font&gt;)</span></li>
+								formatting (such as <span class="code">&lt;i&gt;</span>, <span
+								class="code">&lt;b&gt;</span>, <span class="code">&lt;u&gt;</span>,
+								<span class="code">&lt;font&gt;</span>)
+						</span></li>
 
 						<li><label for="posId">Position</label> <select id="posId"
 							name="pos">
@@ -123,12 +133,16 @@
 
 						<li><label for="colorId">Color:</label> <input type="text"
 							id="colorId" name="color" /> <span class="note">change
-								subtitle color, name (e.g. 'red' or 'yellow') or RGB hexa
-								'#rrggbb' (e.g. '#ff0000' for red)</span></li>
+								subtitle color, name (e.g. <span class="code">red</span> or <span
+								class="code">yellow</span>) or RGB hexa <span class="code">#rrggbb</span>
+								(e.g. <span class="code">#ff0000</span> for red)
+						</span></li>
 
 						<li><label for="scaleId">Scale:</label> <input type="text"
 							id="scaleId" name="scale" /> <span class="note">scale
-								subtitle timestamps (faster/slower); multiplier e.g. 1.001</span></li>
+								subtitle timestamps (faster/slower); multiplier e.g. <span
+								class="code">1.001</span>
+						</span></li>
 
 						<li><label for="shiftById">Shift by:</label> <input
 							type="text" id="shiftById" name="shiftBy" /> <span class="note">shift
@@ -137,7 +151,8 @@
 						<li><label for="splitAtId">Split at:</label> <input
 							type="text" id="splitAtId" name="splitAt" /> <span class="note">time
 								at which to split to 2 subtitle files (first and second output
-								files), e.g. '00:59:00,123'</span></li>
+								files), e.g. <span class="code">00:59:00,123</span>
+						</span></li>
 
 						<li><label for="statsId">Stats:</label> <input
 							type="checkbox" id="statsId" name="stats" value="stats" /> <span

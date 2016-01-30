@@ -129,12 +129,6 @@ div.info {
 	background: #cfc;
 }
 
-.code {
-	font-family: Courier;
-	white-space: pre-wrap;
-	font-size: 0.7em;
-}
-
 table {
 	border-collapse: collapse;
 }
@@ -194,6 +188,17 @@ span.note {
 fieldset {
 	padding-top: 3px;
 	padding-bottom: 7px;
+}
+
+.checksum {
+	font-family: Courier;
+	white-space: pre-wrap;
+	font-size: 0.7em;
+}
+
+.code {
+	font-family: Courier;
+	background: #e8e8e8;
 }
 
 /*================================================================================================*/

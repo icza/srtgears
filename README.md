@@ -81,6 +81,10 @@ Supported input format is SubRip (`*.srt`) only, supported output formats are Su
 
 It should also be noted that SubRip format specification does not include subtitle positioning. Srtgears uses an unofficial extension `{\anX}` which may not be supported by all video players, or some players interpret the position values differently. [MPC-HC](https://mpc-hc.org/) has full support for it. In these cases the Sub Station Alpha output format is recommended (where the specification covers subtitle positioning / alignment).
 
+## Story
+
+Srtgears started as a 48-hour work created for the [Gopher Gala 2016](http://gophergala.com/) event. The initial version can be found [here](https://github.com/gophergala2016/srtgears). I was competing solo.
+
 ## License
 
 See [LICENSE](https://github.com/icza/srtgears/blob/master/LICENSE.md)
