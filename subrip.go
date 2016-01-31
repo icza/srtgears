@@ -207,6 +207,9 @@ func WriteSrtFile(name string, sp *SubsPack) (err error) {
 func WriteSrtTo(w io.Writer, sp *SubsPack) error {
 	wr := &writer{w: w}
 
+	// BOM
+	wr.pr("\xef\xbb\xbf")
+
 	printTime := func(t time.Duration) {
 		hour := t / time.Hour
 		min := (t % time.Hour) / time.Minute

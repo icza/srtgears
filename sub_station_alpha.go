@@ -107,6 +107,9 @@ func keyFromSub(s *Subtitle) (k styleKey) {
 func WriteSsaTo(w io.Writer, sp *SubsPack) (err error) {
 	wr := &writer{w: w}
 
+	// BOM
+	wr.pr("\xef\xbb\xbf")
+
 	// Script Info section
 	wr.prn("[Script Info]") // This must be the first line
 	wr.prn("; This is a Sub Station Alpha v4 script.")
