@@ -49,6 +49,19 @@ func main() {
 	if e.Stats {
 		return // Stats modifies the subtitles, omit writing to files.
 	}
+
+	// If there were modifications but no output file is specified, treat that as an error:
+	if e.Modified {
+		if e.Out == "" {
+			fmt.Println("Output file must be specified ('-out')!")
+			return
+		}
+		if e.SplitAt != "" && e.Out2 == "" {
+			fmt.Println("Second output file must be specified ('-out2')!")
+			return
+		}
+	}
+
 	if err := writeFiles(); err != nil {
 		fmt.Println(err)
 		return

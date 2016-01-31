@@ -40,6 +40,8 @@ type Executor struct {
 	Color      string  // change subtitle color, name (e.g. 'red' or 'yellow') or RGB hexa '#rrggbb' (e.g.'#ff0000' for red)
 	Stats      bool    // analyze file and print statistics
 
+	Modified bool // Flag telling if transformation was performed on loaded subtitle(s) (set by GearIt())
+
 	// Callback function to be called if stats "transformation" to be performed and no errors occured.
 	// Stats is special because it is the only transformation that produces output to Output (and not to file).
 	BeforeStats func()
@@ -71,7 +73,7 @@ func (e *Executor) ProcFlags(arguments []string) error {
 	f.StringVar(&e.Out, "out", "", "output file name (*.srt or *.ssa)")
 	f.StringVar(&e.In2, "in2", "", "optional 2nd input file name (when merging or concatenating subtitles) (*.srt)")
 	f.StringVar(&e.Out2, "out2", "", "optional 2nd output file name (when splitting) (*.srt or *.ssa)")
-	f.BoolVar(&srtgears.Debug, "debug", false, "print debug messages")
+	f.BoolVar(&srtgears.Debug, "debug", true, "print debug messages")
 	f.StringVar(&e.Concat, "concat", "", "concatenate 2 subtitle files, 2nd part start at e.g. '00:59:00,123'")
 	f.BoolVar(&e.Merge, "merge", false, "merge 2 subtitle files ('-in' at bottom, '-in2' at top)")
 	f.StringVar(&e.SplitAt, "splitAt", "", "time at which to split to 2 subtitle files ('-out' and '-out2'), e.g. '00:59:00,123'")
@@ -133,26 +135,32 @@ func (e *Executor) GearIt() (err error) {
 			return fmt.Errorf("Invalid time for concat: %s", e.Concat)
 		}
 		sp1.Concatenate(sp2, secPartStart)
+		e.Modified = true
 	}
 
 	if e.Merge {
 		sp1.Merge(sp2)
+		e.Modified = true
 	}
 
 	if e.Lengthen != 0 {
 		sp1.Lengthen(e.Lengthen)
+		e.Modified = true
 	}
 
 	if e.RemoveCtrl {
 		sp1.RemoveControl()
+		e.Modified = true
 	}
 
 	if e.RemoveHI {
 		sp1.RemoveHI()
+		e.Modified = true
 	}
 
 	if e.RemoveHTML {
 		sp1.RemoveHTML()
+		e.Modified = true
 	}
 
 	if e.Pos != "" {
@@ -161,18 +169,22 @@ func (e *Executor) GearIt() (err error) {
 			return fmt.Errorf("Invalid pos value: %s", e.Pos)
 		}
 		sp1.SetPos(pos2)
+		e.Modified = true
 	}
 
 	if e.Color != "" {
 		sp1.SetColor(e.Color)
+		e.Modified = true
 	}
 
 	if e.Scale != 0 {
 		sp1.Scale(e.Scale)
+		e.Modified = true
 	}
 
 	if e.ShiftBy != 0 {
 		sp1.Shift(time.Duration(e.ShiftBy) * time.Millisecond)
+		e.Modified = true
 	}
 
 	if e.SplitAt != "" {
@@ -182,6 +194,7 @@ func (e *Executor) GearIt() (err error) {
 		}
 		sp2 = sp1.Split(at)
 		e.Sp2 = sp2 // sp2 is just a local copy, so we need to update Executor.Sp2 too!
+		e.Modified = true
 	}
 
 	if e.Stats {

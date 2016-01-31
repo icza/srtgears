@@ -59,6 +59,7 @@ func WriteSsaFile(name string, sp *SubsPack) (err error) {
 	}
 	defer f.Close()
 
+	debugf("Writing %d subtitles to file: %s", len(sp.Subs), name)
 	return WriteSsaTo(f, sp)
 }
 

@@ -34,7 +34,8 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 	c.Debugf("Location: %s;%s;%s;%s", r.Header.Get("X-AppEngine-Country"), r.Header.Get("X-AppEngine-Region"),
 		r.Header.Get("X-AppEngine-City"), r.Header.Get("X-AppEngine-CityLatLong"))
 
-	args := []string{} // To simulate command line arguments
+	// To simulate command line arguments
+	args := []string{"-debug=false"} // No debug, this is the web interface!
 
 	// Form rewind: fill args slice with the posted form values
 
@@ -94,6 +95,20 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 		return // If stats was specified, response is already committed.
 	}
 
+	// If there were modifications but no output file is specified, treat that as an error:
+	if e.Modified {
+		if e.Out == "" {
+			c.Errorf("Output file must be specified ('-out')!")
+			fmt.Fprint(w, "Output file must be specified ('-out')!")
+			return
+		}
+		if e.SplitAt != "" && e.Out2 == "" {
+			c.Errorf("Second output file must be specified ('-out2')!")
+			fmt.Fprint(w, "Second output file must be specified ('-out2')!")
+			return
+		}
+	}
+
 	// Everything went ok. We can now generate and send the transformed subtitles.
 	if err := sendSubs(w, e); err != nil {
 		c.Errorf("Failed to send subtitles: %v", err)
@@ -130,12 +145,8 @@ func sendSubs(w http.ResponseWriter, e *exec.Executor) (err error) {
 		fileCount++
 	}
 
-	if fileCount == 0 { // Just to make sure
-		fmt.Fprint(w, "No output file has been specified.")
-		return
-	}
 	if fileCount == 2 && e.Out == e.Out2 {
-		fmt.Fprint(w, "The 2 output file names cannot be the same!")
+		fmt.Fprint(w, "The 2 output file names must be different ('-out' and '-out2')!")
 		return
 	}
 
