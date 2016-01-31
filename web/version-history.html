@@ -1,0 +1,86 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="description"
+	content="This page lists the Srtgears releases and the changes and new features of the different versions." />
+<meta name="keywords"
+	content="Srtgears, version, release, history, command line tool, cmd, SRT, SSA, subtitle, engine, reading, load, manipulate, transform, save, SubRip, Sub Station Alpha, movie, merge, concatenate, repair, transform, color, position, split, lengthen, shorten, color, hearing impaired, formatting, scale, shift, stats" />
+<link rel="stylesheet" type="text/css"
+	href="/static/srt-gears.css?v=0.1" />
+<link rel="shortcut icon" href="/static/favicon.ico?v=0.1" />
+<title>Version history - Srtgears&#8482;</title>
+</head>
+<body>
+	<script>
+		(function(i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function() {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script',
+				'//www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-4884955-36', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+	<div id="container">
+		<div id="header">
+			<div id="header-title">
+				<h1>
+					<a href="/">Srtgears&#8482;</a>
+				</h1>
+			</div>
+		</div>
+
+		<div id="navigation">
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/srtgears-online.html">Srtgears online</a></li>
+				<li><a href="/download.html">Downloads</a></li>
+				<li><a href="/version-history.html" class="selected">Version
+						history</a></li>
+				<li><a href="/license.html">License</a></li>
+			</ul>
+		</div>
+
+		<div id="content">
+			<h2>Version history</h2>
+
+			<h4>1.1, 2016-01-31</h4>
+			<ul>
+				<li>If no arguments is provided at all, usage is printed.</li>
+				<li><span class="code">-merge</span> was incorrectly placing
+					first subtitle to the top and second to the bottom. This is fixed
+					now.
+				<li>Added check and error report if required inputs and outputs
+					are not specified based on provided transformations (e.g. if <span
+					class="code">-merge</span> is specified, both <span class="code">-in</span>,
+					<span class="code">-in2</span> and <span class="code">-out</span>
+					are required)
+				</li>
+				<li><span class="code">-debug</span> is now on by default. If
+					you want to turn it off, specify the <span class="code">-debug=false</span>
+					argument.</li>
+				<li>BOM (byte order mark) is now generated in all output files.</li>
+				<li>Corrected some grammar typos.</li>
+				<li>Other minor changes and improvements</li>
+			</ul>
+
+			<h4>1.0, 2016-01-25</h4>
+			<p>Initial release, created in 48 hours (with web page +
+				documentation included).</p>
+		</div>
+	</div>
+
+	<div id="footer">Srtgears is a trademark of Andr&#225;s Belicza.
+		Copyright &#169; Andr&#225;s Belicza, 2016.</div>
+	</div>
+
+</body>
+</html>
