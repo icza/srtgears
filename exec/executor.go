@@ -223,5 +223,15 @@ func (e *Executor) GearIt() (err error) {
 		p("Subs with hearing impaired", ss.HIs)
 	}
 
+	if !e.Stats && e.Modified {
+		// If there were modifications but no output file is specified, treat that as an error:
+		if e.Out == "" {
+			return fmt.Errorf("Output file must be specified ('-out')!")
+		}
+		if e.SplitAt != "" && e.Out2 == "" {
+			return fmt.Errorf("Second output file must be specified ('-out2')!")
+		}
+	}
+
 	return
 }

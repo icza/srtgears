@@ -101,7 +101,7 @@ func (sp *SubsPack) Merge(sp2 *SubsPack) {
 	sp.SetPos(PosNotSpecified)
 
 	// Put other subtitles to the top:
-	sp.SetPos(Top)
+	sp2.SetPos(Top)
 
 	// Append:
 	sp.Subs = append(sp.Subs, sp2.Subs...)

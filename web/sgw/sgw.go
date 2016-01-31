@@ -95,20 +95,6 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 		return // If stats was specified, response is already committed.
 	}
 
-	// If there were modifications but no output file is specified, treat that as an error:
-	if e.Modified {
-		if e.Out == "" {
-			c.Errorf("Output file must be specified ('-out')!")
-			fmt.Fprint(w, "Output file must be specified ('-out')!")
-			return
-		}
-		if e.SplitAt != "" && e.Out2 == "" {
-			c.Errorf("Second output file must be specified ('-out2')!")
-			fmt.Fprint(w, "Second output file must be specified ('-out2')!")
-			return
-		}
-	}
-
 	// Everything went ok. We can now generate and send the transformed subtitles.
 	if err := sendSubs(w, e); err != nil {
 		c.Errorf("Failed to send subtitles: %v", err)
