@@ -5,11 +5,11 @@
 <meta name="description"
 	content="This page contains download links for the Srtgears command line tool." />
 <meta name="keywords"
-	content="Srtgears, download, command line tool, cmd, SRT, SSA, subtitle, engine, reading, load, manipulate, transform, save, SubRip, Sub Station Alpha, movie, merge, concatenate, repair, transform, color, position, split, lengthen, shorten, color, hearing impaired, formatting, scale, shift, stats" />
+	content="Srtgears, download, release, command line tool, cmd, SRT, SSA, subtitle, engine, reading, load, manipulate, transform, save, SubRip, Sub Station Alpha, movie, merge, concatenate, repair, transform, color, position, split, lengthen, shorten, color, hearing impaired, formatting, scale, shift, stats" />
 <link rel="stylesheet" type="text/css"
 	href="/static/srt-gears.css?v=0.1" />
 <link rel="shortcut icon" href="/static/favicon.ico?v=0.1" />
-<title>Srtgears&#8482; downloads</title>
+<title>Downloads - Srtgears&#8482;</title>
 </head>
 <body>
 	<script>
@@ -43,6 +43,7 @@
 				<li><a href="/">Home</a></li>
 				<li><a href="/srtgears-online.html">Srtgears online</a></li>
 				<li><a href="/download.html" class="selected">Downloads</a></li>
+				<li><a href="/version-history.html">Version history</a></li>
 				<li><a href="/license.html">License</a></li>
 			</ul>
 		</div>
@@ -54,6 +55,10 @@
 				tool. You can also use <a href="/srtgears-online.html">srtgears
 					online</a> without downloading it.
 			</div>
+			<p>
+				Check out the <a href="version-history.html">Version history</a>
+				page to see what are the changes and new features.
+			</p>
 			<h3>Latest version: Srtgears 1.0, release date: 2016-01-25</h3>
 			<table class="dlTable">
 				<tr>
@@ -106,32 +111,6 @@
 					<td class="checksum">06bd104f406667a755455b5f452e0d036c061d45bf8dd04d09c815989241e766</td>
 				</tr>
 			</table>
-
-			<h2>Version history</h2>
-
-			<h4>1.1, 2016-01-31</h4>
-			<ul>
-				<li>If no arguments is provided at all, usage is printed.</li>
-				<li><span class="code">-merge</span> was incorrectly placing
-					first subtitle to the top and second to the bottom. This is fixed
-					now.
-				<li>Added check and error report if required inputs and outputs
-					are not specified based on provided transformations (e.g. if <span
-					class="code">-merge</span> is specified, both <span class="code">-in</span>,
-					<span class="code">-in2</span> and <span class="code">-out</span>
-					are required)
-				</li>
-				<li><span class="code">-debug</span> is now on by default. If
-					you want to turn it off, specify the <span class="code">-debug=false</span>
-					argument.</li>
-				<li>BOM (byte order mark) is now generated in all output files.</li>
-				<li>Corrected some grammar typos.</li>
-				<li>Other minor changes and improvements</li>
-			</ul>
-
-			<h4>1.0, 2016-01-25</h4>
-			<p>Initial release, created in 48 hours (with web page +
-				documentation included).</p>
 		</div>
 	</div>
 

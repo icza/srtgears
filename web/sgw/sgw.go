@@ -40,18 +40,13 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 	// Form rewind: fill args slice with the posted form values
 
 	in, inh, err := r.FormFile("in")
-	if err != nil {
-		c.Errorf("No input srt file 'in': %v", err)
-		fmt.Fprint(w, "You must select an input srt file!")
-		return
+	if err == nil {
+		c.Debugf("Received uploaded file 'in': %s", inh.Filename)
+		args = append(args, "-in", inh.Filename)
 	}
-	c.Debugf("Received uploaded file 'in': %s", inh.Filename)
-	args = append(args, "-in", inh.Filename)
 
 	in2, inh2, err := r.FormFile("in2")
-	if err != nil {
-		c.Debugf("No 2nd input srt 'in2': %v", err)
-	} else {
+	if err == nil {
 		c.Debugf("Received uploaded file 'in2': %s", inh2.Filename)
 		args = append(args, "-in2", inh2.Filename)
 	}
@@ -67,10 +62,12 @@ func sgwHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Read input files
-	if e.Sp1, err = srtgears.ReadSrtFrom(in); err != nil {
-		c.Errorf("Failed to parse uploaded file 'in': %v", err)
-		fmt.Fprint(w, "Failed to parse uploaded file: ", err)
-		return
+	if in != nil {
+		if e.Sp1, err = srtgears.ReadSrtFrom(in); err != nil {
+			c.Errorf("Failed to parse uploaded file 'in': %v", err)
+			fmt.Fprint(w, "Failed to parse uploaded file: ", err)
+			return
+		}
 	}
 
 	if in2 != nil {

@@ -16,6 +16,10 @@ handlers:
   static_files: download.html
   upload: download.html
 
+- url: /version-history.html
+  static_files: version-history.html
+  upload: version-history.html
+
 - url: /license.html
   static_files: license.html
   upload: license.html
