@@ -1,25 +1,29 @@
-set version=1.1
+set VERSION=1.1
 
-set GOOS=windows
-set GOARCH=amd64
-go build -ldflags "-X main.Version=%version%" -o srtgears-%version%-%GOOS%-%GOARCH%/srtgears.exe
+@set GOBUILD=go build -ldflags "-X main.Version=%VERSION%" -o
 
-set GOARCH=386
-go build -ldflags "-X main.Version=%version%" -o srtgears-%version%-%GOOS%-%GOARCH%/srtgears.exe
+@set GOOS=windows
+@set GOARCH=amd64
+%GOBUILD% srtgears-%VERSION%-%GOOS%-%GOARCH%/srtgears.exe
 
-set GOOS=linux
-go build -ldflags "-X main.Version=%version%" -o srtgears-%version%-%GOOS%-%GOARCH%/srtgears
+@set GOARCH=386
+%GOBUILD% srtgears-%VERSION%-%GOOS%-%GOARCH%/srtgears.exe
 
-set GOARCH=amd64
-go build -ldflags "-X main.Version=%version%" -o srtgears-%version%-%GOOS%-%GOARCH%/srtgears
+@set GOOS=linux
+%GOBUILD% srtgears-%VERSION%-%GOOS%-%GOARCH%/srtgears
 
-set GOOS=darwin
-go build -ldflags "-X main.Version=%version%" -o srtgears-%version%-%GOOS%-%GOARCH%/srtgears
+@set GOARCH=amd64
+%GOBUILD% srtgears-%VERSION%-%GOOS%-%GOARCH%/srtgears
 
-set GOARCH=386
-go build -ldflags "-X main.Version=%version%" -o srtgears-%version%-%GOOS%-%GOARCH%/srtgears
+@set GOOS=darwin
+%GOBUILD% srtgears-%VERSION%-%GOOS%-%GOARCH%/srtgears
 
-set GOOS=windows
-set GOARCH=amd64
+@set GOARCH=386
+%GOBUILD% srtgears-%VERSION%-%GOOS%-%GOARCH%/srtgears
 
-pause
+@set GOOS=windows
+@set GOARCH=amd64
+
+@echo:
+@echo DONE! Press a key.
+@pause>nul
