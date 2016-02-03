@@ -19,7 +19,7 @@ import (
 )
 
 // Release folder name pattern, e.g. "srtgears-1.1-windows-amd64"
-var rlsFldrPttrn = regexp.MustCompile("srtgears-([^-]*)-([^-]*)-([^-]*)")
+var rlsFldrPttrn = regexp.MustCompile("^srtgears-([^-]*)-([^-]*)-([^-]*)$")
 
 // Folders relative to Srtgears root folder
 const (
