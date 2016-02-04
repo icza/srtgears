@@ -10,12 +10,14 @@ package main
 import (
 	"archive/zip"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
+	"time"
 )
 
 // Release folder name pattern, e.g. "srtgears-1.1-windows-amd64"
@@ -35,19 +37,6 @@ var (
 )
 
 var targetFiles []string // Target packed releases (*.zip files)
-
-// Mapping from GOOS value to OS display name
-var osNameMap = map[string]string{
-	"windows": "Windows",
-	"linux":   "Linux",
-	"darwin":  "OS X",
-}
-
-// Mapping from GOARCH value to architecture display name
-var archNameMap = map[string]string{
-	"amd64": "64-bit",
-	"386":   "32-bit",
-}
 
 func main() {
 	var err error
@@ -160,6 +149,7 @@ func packRelease(folder string) (targetFileName string, err error) {
 		// fh.Name is only the fienme, so:
 		fh.Name = relPath
 
+		fh.Method = zip.Deflate
 		w, err := zw.CreateHeader(fh)
 		if err != nil {
 			return err
@@ -173,25 +163,97 @@ func packRelease(folder string) (targetFileName string, err error) {
 	return
 }
 
+// Mapping from GOOS value to OS display name
+var osNameMap = map[string]string{
+	"windows": "Windows",
+	"linux":   "Linux",
+	"darwin":  "OS X",
+}
+
+// Mapping from GOARCH value to architecture display name
+var archNameMap = map[string]string{
+	"amd64": "64-bit",
+	"386":   "32-bit",
+}
+
 // generateDownloadHTML generates the HTML table in the format ready for the Downloads page (download.html).
 func generateDownloadHTML() (err error) {
-	// It happens we want releases in reverse order in the HTML table:
-	sort.Sort(sort.Reverse(sort.StringSlice(targetFiles)))
-
-	webFolder := filepath.Join(srtgearsRoot, relativeWebFldr)
-
-	// hash and print HTML table
-	for _, targetFile := range targetFiles {
-		url, err := filepath.Rel(webFolder, targetFile)
-		if err != nil {
-			return err
-		}
-
-		// TODO
-		// We need forward slashes "/" in urls:
-		url = "/" + filepath.ToSlash(url)
-		log.Println(url)
+	type FileDesc struct {
+		Class  string
+		OS     string
+		Arch   string
+		URL    string
+		Name   string
+		Size   string
+		SHA256 string
 	}
 
-	return
+	fds := []*FileDesc{}
+
+	// It happens we want releases in reverse order in the HTML table:
+	sort.Sort(sort.Reverse(sort.StringSlice(targetFiles)))
+	webFolder := filepath.Join(srtgearsRoot, relativeWebFldr)
+
+	params := map[string]interface{}{
+		"ReleaseDate": time.Now().Format("2006-01-02"),
+	}
+
+	// Fill fds scice
+	for i, targetFile := range targetFiles {
+		fd := FileDesc{Name: filepath.Base(targetFile)}
+		fds = append(fds, &fd)
+
+		// the regexp patter is for folder name (without extension)
+		nameNoExt := fd.Name[:len(fd.Name)-len(filepath.Ext(fd.Name))]
+		if parts := rlsFldrPttrn.FindStringSubmatch(nameNoExt); len(parts) > 0 {
+			// [full string, version, os, arch]
+			params["Version"] = parts[1]
+			fd.OS = osNameMap[parts[2]]
+			fd.Arch = archNameMap[parts[3]]
+		} else {
+			// Never to happen, file name was already matched earlier
+			return fmt.Errorf("Target name does not match pattern: ", targetFile)
+		}
+		if i%2 != 0 {
+			fd.Class = "alt"
+		}
+		if fd.URL, err = filepath.Rel(webFolder, targetFile); err != nil {
+			return
+		}
+		// We need forward slashes "/" in urls:
+		fd.URL = "/" + filepath.ToSlash(fd.URL)
+		var fi os.FileInfo
+		if fi, err = os.Stat(targetFile); err != nil {
+			return
+		}
+		fd.Size = fmt.Sprintf("%.2f MB", float64(fi.Size())/(1<<20))
+
+		// TODO
+		// hash and include checksum
+	}
+	params["Fds"] = fds
+
+	// Now generate download table:
+	t := template.Must(template.New("").Parse(dltable))
+	return t.Execute(os.Stdout, params)
 }
+
+const dltable = `			<h4>Latest version: Srtgears {{.Version}}, release date: {{.ReleaseDate}}</h4>
+			
+			<table class="dlTable">
+				<tr>
+					<th>OS</th>
+					<th>Arch</th>
+					<th>Link</th>
+					<th>Size</th>
+					<th>SHA256 Checksum</th>
+				</tr>
+{{range $i, $fd := .Fds}}				<tr{{with .Class}} class="{{.}}"{{end}}>
+					<td>{{.OS}}</td>
+					<td>{{.Arch}}</td>
+					<td><a href="{{.URL}}">{{.Name}}</a></td>
+					<td>{{.Size}}</td>
+					<td class="checksum">{{.SHA256}}</td>
+				</tr>
+{{end}}			</table>
+`

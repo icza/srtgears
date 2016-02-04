@@ -141,7 +141,7 @@ func sendSubs(w http.ResponseWriter, e *exec.Executor) (err error) {
 
 	wf := func(name string, sp *srtgears.SubsPack) (err error) {
 		var f io.Writer
-		fh := &zip.FileHeader{Name: name}
+		fh := &zip.FileHeader{Name: name, Method: zip.Deflate}
 		fh.SetModTime(time.Now())
 		if f, err = zw.CreateHeader(fh); err != nil {
 			return
