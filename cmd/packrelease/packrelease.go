@@ -9,6 +9,8 @@ package main
 
 import (
 	"archive/zip"
+	"bytes"
+	"crypto/sha256"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -176,19 +178,20 @@ var archNameMap = map[string]string{
 	"386":   "32-bit",
 }
 
+// Describes a row (a file) in the download table.
+type fileDesc struct {
+	Class  string // Css class of the row
+	OS     string // OS
+	Arch   string // Architecture
+	URL    string // Download URL
+	Name   string // File name
+	Size   string // File size
+	SHA256 string // File SHA256 checksum
+}
+
 // generateDownloadHTML generates the HTML table in the format ready for the Downloads page (download.html).
 func generateDownloadHTML() (err error) {
-	type FileDesc struct {
-		Class  string
-		OS     string
-		Arch   string
-		URL    string
-		Name   string
-		Size   string
-		SHA256 string
-	}
-
-	fds := []*FileDesc{}
+	fds := []*fileDesc{}
 
 	// It happens we want releases in reverse order in the HTML table:
 	sort.Sort(sort.Reverse(sort.StringSlice(targetFiles)))
@@ -200,7 +203,7 @@ func generateDownloadHTML() (err error) {
 
 	// Fill fds scice
 	for i, targetFile := range targetFiles {
-		fd := FileDesc{Name: filepath.Base(targetFile)}
+		fd := fileDesc{Name: filepath.Base(targetFile)}
 		fds = append(fds, &fd)
 
 		// the regexp patter is for folder name (without extension)
@@ -228,14 +231,29 @@ func generateDownloadHTML() (err error) {
 		}
 		fd.Size = fmt.Sprintf("%.2f MB", float64(fi.Size())/(1<<20))
 
-		// TODO
-		// hash and include checksum
+		// Hash and include checksum
+		var content []byte
+		if content, err = ioutil.ReadFile(targetFile); err != nil {
+			return
+		}
+		fd.SHA256 = fmt.Sprintf("%x", sha256.Sum256(content))
 	}
 	params["Fds"] = fds
 
 	// Now generate download table:
 	t := template.Must(template.New("").Parse(dltable))
-	return t.Execute(os.Stdout, params)
+	buf := &bytes.Buffer{}
+	if err = t.Execute(buf, params); err != nil {
+		return
+	}
+	outf := "download-table.html"
+	if err = ioutil.WriteFile(outf, buf.Bytes(), 0); err != nil {
+		return
+	}
+	log.Println("Download table written to:", outf)
+	// Also print to console:
+	os.Stdout.Write(buf.Bytes())
+	return
 }
 
 const dltable = `			<h4>Latest version: Srtgears {{.Version}}, release date: {{.ReleaseDate}}</h4>
