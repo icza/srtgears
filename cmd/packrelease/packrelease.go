@@ -215,7 +215,7 @@ func generateDownloadHTML() (err error) {
 			fd.Arch = archNameMap[parts[3]]
 		} else {
 			// Never to happen, file name was already matched earlier
-			return fmt.Errorf("Target name does not match pattern: ", targetFile)
+			return fmt.Errorf("Target name does not match pattern: %s", targetFile)
 		}
 		if i%2 != 0 {
 			fd.Class = "alt"
