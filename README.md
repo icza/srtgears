@@ -1,6 +1,6 @@
 # Srtgears&trade;
 
-[![GoDoc](https://godoc.org/github.com/icza/srtgears?status.svg)](https://godoc.org/github.com/icza/srtgears)
+[![GoDoc](https://godoc.org/github.com/icza/srtgears?status.svg)](https://godoc.org/github.com/icza/srtgears) [![Go Report Card](https://goreportcard.com/badge/github.com/icza/srtgears)](https://goreportcard.com/report/github.com/icza/srtgears)
 
 Srtgears&trade; is a subtitle engine for reading subtitle files, manipulating / transforming them and then saving the result into another file.
 
