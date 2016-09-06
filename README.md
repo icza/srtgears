@@ -58,12 +58,12 @@ To use the engine, first import it:
 And for example using the engine to merge 2 subtitle files to have a dual sub saved in Sub Station Alpha (*.ssa) format:
 
 	sp1, err := srtgears.ReadSrtFile("eng.srt")
-	// check err
+	check(err) // Check / handle error
 	sp2, err := srtgears.ReadSrtFile("hun.srt")
-	// check err
+	check(err) // Check / handle error
 	sp1.Merge(sp2)
 	err = srtgears.WriteSsaFile("eng+hun.ssa", sp1);
-	// check err
+	check(err) // Check / handle error
 
 You can see more usage examples in the [package doc](http://godoc.org/github.com/icza/srtgears).
 
