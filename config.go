@@ -11,12 +11,15 @@ import (
 )
 
 const (
-	HomePage = "https://srt-gears.appspot.com/" // Srtgears home page
-	Author   = "Andras Belicza"                 // Author name
+	// Srtgears home page
+	HomePage = "https://srt-gears.appspot.com/"
+	// Author name
+	Author = "Andras Belicza"
 )
 
 var (
-	Debug bool // Tells whether to print debug messages.
+	// Tells whether to print debug messages.
+	Debug bool
 )
 
 func debugf(format string, a ...interface{}) {

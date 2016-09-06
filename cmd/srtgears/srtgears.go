@@ -14,7 +14,8 @@ import (
 	"strings"
 )
 
-var Version = "dev" // Srtgears version, filled by build
+// Srtgears version, filled by build
+var Version = "dev"
 
 // Our heart: the Executor
 var e = exec.New(os.Stdout)

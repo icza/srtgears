@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-// Subtitle position type.
+// Pos is the subtitle position type.
 type Pos int
 
 // Possible position values of subtitles.

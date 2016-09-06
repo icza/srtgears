@@ -42,7 +42,7 @@ type Executor struct {
 
 	Modified bool // Flag telling if transformation was performed on loaded subtitle(s) (set by GearIt())
 
-	// Callback function to be called if stats "transformation" to be performed and no errors occured.
+	// Callback function to be called if stats "transformation" to be performed and no errors occurred.
 	// Stats is special because it is the only transformation that produces output to Output (and not to file).
 	BeforeStats func()
 

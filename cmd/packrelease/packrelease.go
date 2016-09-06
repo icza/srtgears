@@ -73,12 +73,12 @@ func initFolders() (err error) {
 
 	// Check folders:
 	for _, folder := range []string{rlsBldFldr, targetFolder} {
-		if fi, err := os.Stat(folder); os.IsNotExist(err) {
+		fi, err := os.Stat(folder)
+		if os.IsNotExist(err) {
 			return fmt.Errorf("Folder does not exist: %s", folder)
-		} else {
-			if !fi.IsDir() {
-				return fmt.Errorf("Path is not a folder: %s", folder)
-			}
+		}
+		if !fi.IsDir() {
+			return fmt.Errorf("Path is not a folder: %s", folder)
 		}
 	}
 	return
