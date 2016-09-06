@@ -19,7 +19,7 @@ type SubsPack struct {
 	Subs []*Subtitle
 }
 
-// Type that implements sorting
+// SortSubtitles is a type that implements sorting
 type SortSubtitles []*Subtitle
 
 func (s SortSubtitles) Len() int           { return len(s) }
@@ -154,7 +154,7 @@ func (sp *SubsPack) Lengthen(factor float64) {
 	}
 }
 
-// Statistics that can be gathered from a SubsPack.
+// SubsStats is statistics that can be gathered from a SubsPack.
 type SubsStats struct {
 	Subs                      int           // Total number of subs.
 	Lines                     int           // # of lines

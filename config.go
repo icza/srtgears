@@ -11,14 +11,14 @@ import (
 )
 
 const (
-	// Srtgears home page
+	// HomePage is the Srtgears home page
 	HomePage = "https://srt-gears.appspot.com/"
 	// Author name
 	Author = "Andras Belicza"
 )
 
 var (
-	// Tells whether to print debug messages.
+	// Debug tells whether to print debug messages.
 	Debug bool
 )
 

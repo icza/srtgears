@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-// Srtgears version, filled by build
+// Version is the Srtgears version, filled by build
 var Version = "dev"
 
 // Our heart: the Executor
