@@ -4,7 +4,12 @@ Example functions.
 
 */
 
-package srtgears
+package srtgears_test
+
+import (
+	"github.com/icza/srtgears"
+	"time"
+)
 
 // This example shows how to merge 2 subtitle files to have a dual sub saved in Sub Station Alpha (*.ssa) format.
 func Example_merge() {
