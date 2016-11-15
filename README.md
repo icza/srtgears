@@ -1,6 +1,6 @@
 # Srtgears&trade;
 
-[![GoDoc](https://godoc.org/github.com/icza/srtgears?status.svg)](https://godoc.org/github.com/icza/srtgears) [![Go Report Card](https://goreportcard.com/badge/github.com/icza/srtgears)](https://goreportcard.com/report/github.com/icza/srtgears)
+[![GoDoc](https://godoc.org/github.com/icza/srtgears?status.svg)](https://godoc.org/github.com/icza/srtgears) [![Build Status](https://travis-ci.org/icza/srtgears.svg?branch=master)](https://travis-ci.org/icza/srtgears) [![Go Report Card](https://goreportcard.com/badge/github.com/icza/srtgears)](https://goreportcard.com/report/github.com/icza/srtgears)
 
 Srtgears&trade; is a subtitle engine for reading subtitle files, manipulating / transforming them and then saving the result into another file.
 
@@ -10,7 +10,7 @@ Srtgears provides some very handy features which are not available in other subt
 - lengthen / shorten display duration of subtitles (if you're a slow reader, you're gonna appreciate this :))
 - remove hearing impaired (HI) texts (such as `"[PHONE RINGING]"` or `"(phone ringing)"`)
 - strip off formatting (such as `&lt;i&gt;`, `&lt;b&gt;`, `&lt;u&gt;`, `&lt;font&gt;`)
-- split the subtitle file at a specified time 
+- split the subtitle file at a specified time
 - statistics from the subtitles
 - etc...
 
@@ -46,7 +46,7 @@ And last (but not least) a Go package for developers. The engine was designed to
 To get the source code (along with the sources of the tool and web interface), use `go get`:
 
     go get github.com/icza/srtgears
-    
+
 Documentation can be found at:
 
 http://godoc.org/github.com/icza/srtgears
