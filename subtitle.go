@@ -53,6 +53,9 @@ func (s *Subtitle) RemoveHI() (remove bool) {
 		// Check without HTML formatting to recognize and remove these:
 		// "<i>[PHONE RINGING]</i>"
 		line = htmlPattern.ReplaceAllString(line, "")
+		if len(line) == 0 {
+			continue
+		}
 		first, last := line[0], line[len(line)-1]
 		if first == '[' && last == ']' || first == '(' && last == ')' {
 			remove = true
