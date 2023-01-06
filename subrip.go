@@ -160,7 +160,8 @@ func ReadSrtFrom(r io.Reader) (sp *SubsPack, err error) {
 
 // Regexp pattern to extract data from timestamp lines.
 // Very permissive, for example also accepts this line:
-//     dY 00:02:20.476--->   00:02:22,501X Y
+//
+//	dY 00:02:20.476--->   00:02:22,501X Y
 var timestampsPattern = regexp.MustCompile(`(\d\d):(\d\d):(\d\d)[,\.](\d\d\d)\s*-+>\s*(\d\d):(\d\d):(\d\d)[,\.](\d\d\d)`)
 
 //                                            0 0 :  0 0 :  0 0  ,     0 0 0    -->     0 0 :  0 0 :  0 0  ,     0 0 0
@@ -216,7 +217,7 @@ func WriteSrtTo(w io.Writer, sp *SubsPack) error {
 		min := (t % time.Hour) / time.Minute
 		sec := (t % time.Minute) / time.Second
 		ms := (t % time.Second) / time.Millisecond
-		wr.prf("%02d:%02d:%02d.%03d", hour, min, sec, ms)
+		wr.prf("%02d:%02d:%02d,%03d", hour, min, sec, ms)
 	}
 
 	for i, s := range sp.Subs {
