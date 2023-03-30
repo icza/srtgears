@@ -1,6 +1,8 @@
 # Srtgears&trade;
 
-[![GoDoc](https://godoc.org/github.com/icza/srtgears?status.svg)](https://godoc.org/github.com/icza/srtgears) [![Build Status](https://travis-ci.org/icza/srtgears.svg?branch=master)](https://travis-ci.org/icza/srtgears) [![Go Report Card](https://goreportcard.com/badge/github.com/icza/srtgears)](https://goreportcard.com/report/github.com/icza/srtgears)
+![Build Status](https://github.com/icza/srtgears/actions/workflows/go.yml/badge.svg)
+[![Go Reference](https://pkg.go.dev/badge/github.com/icza/srtgears.svg)](https://pkg.go.dev/github.com/icza/srtgears)
+[![Go Report Card](https://goreportcard.com/badge/github.com/icza/srtgears)](https://goreportcard.com/report/github.com/icza/srtgears)
 
 Srtgears&trade; is a subtitle engine for reading subtitle files, manipulating / transforming them and then saving the result into another file.
 
